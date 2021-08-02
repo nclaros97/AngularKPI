@@ -1,0 +1,43 @@
+<div class="container-fluid mt-10">
+  <div class="card">
+    <div class="card-header">
+      <h4>Lista de Objetivos</h4>
+    </div>
+    <div class="card-body">
+      <dx-data-grid [dataSource]="objetivos" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
+        [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
+        (onRowUpdated)="updateObjetivo($event.data)"
+        (onRowRemoved)="deleteObjetivo($event.data.idObjetivo)"
+        (onRowInserted)="addObjetivo($event.data)">
+        <dxo-scrolling rowRenderingMode="virtual">
+        </dxo-scrolling>
+        <dxo-paging [pageSize]="10">
+        </dxo-paging>
+        <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
+          [showInfo]="true" [showNavigationButtons]="true" [showPageSizeSelector]="true">
+        </dxo-pager>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+          <dxo-popup title="Objetivos" [showTitle]="true" [width]="700" [height]="525">
+          </dxo-popup>
+          <dxo-form>
+            <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
+              <dxi-item dataField="nombreObjetivo"></dxi-item>
+              <dxi-item dataField="porcentajeObjetivo"></dxi-item>
+            </dxi-item>
+          </dxo-form>
+        </dxo-editing>
+
+        <dxi-column dataField="idObjetivo" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
+        </dxi-column>
+        <dxi-column dataField="nombreObjetivo" caption="Objetivo" alignment="center" [width]="600">
+        </dxi-column>
+        <dxi-column dataField="porcentajeObjetivo" caption="Porcentaje" alignment="center">
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+  </div>
+
+</div>
