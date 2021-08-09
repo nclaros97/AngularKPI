@@ -6,18 +6,22 @@
     <div class="card-body">
       <dx-data-grid [dataSource]="objetivos" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
         [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
-        (onRowUpdated)="updateObjetivo($event.data)"
-        (onRowRemoved)="deleteObjetivo($event.data.idObjetivo)"
-        (onRowInserted)="addObjetivo($event.data)">
+        (onRowUpdated)="updateObjetivo($event.data)" (onRowRemoved)="deleteObjetivo($event.data.idObjetivo)"
+        (onRowInserted)="addObjetivo($event.data)"
+        (onRowExpanding)="handleRowColapsed($event.key)">
+
         <dxo-scrolling rowRenderingMode="virtual">
         </dxo-scrolling>
-        <dxo-paging [pageSize]="10">
+        <dxo-paging [pageSize]="5">
         </dxo-paging>
         <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
-          [showInfo]="true" [showNavigationButtons]="true" [showPageSizeSelector]="true">
+          [showInfo]="true" [showNavigationButtons]="true">
         </dxo-pager>
         <dxo-filter-row [visible]="true"></dxo-filter-row>
         <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+        <dxo-master-detail [enabled]="true" template="subObjetivos"></dxo-master-detail>
 
         <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
           <dxo-popup title="Objetivos" [showTitle]="true" [width]="700" [height]="525">
@@ -36,6 +40,54 @@
         </dxi-column>
         <dxi-column dataField="porcentajeObjetivo" caption="Porcentaje" alignment="center">
         </dxi-column>
+
+        <div *dxTemplate="let subObjetivo of 'subObjetivos'">
+          <dx-data-grid [dataSource]="subObjetivo.data.subobjetivos" [hoverStateEnabled]="true" [showBorders]="true"
+            [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
+            (onRowUpdated)="updateSubObjetivo($event.data)"
+            (onRowRemoved)="deleteSubObjetivo($event.data.idSubobjetivos)"
+            (onRowInserted)="addSubObjetivo($event.data)">
+
+            <dxo-scrolling rowRenderingMode="virtual">
+            </dxo-scrolling>
+            <dxo-paging [pageSize]="5">
+            </dxo-paging>
+            <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
+              [showInfo]="true" [showNavigationButtons]="true">
+            </dxo-pager>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-header-filter [visible]="true"></dxo-header-filter>
+            <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+            <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+              <dxo-popup title="Sub Objetivos" [showTitle]="true" [width]="700" [height]="525">
+              </dxo-popup>
+              <dxo-form>
+                <dxi-item dataField="nombreSubobjetivo"></dxi-item>
+                <dxi-item dataField="subObjetivo" caption="% Sub Objetivo"></dxi-item>
+                <dxi-item template="areaSelectBox">
+                  <dxo-label text="Área"></dxo-label>
+                </dxi-item>
+                <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
+                  <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false"
+                    valueExpr="idArea" displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
+                  </dx-select-box>
+                </div>
+              </dxo-form>
+            </dxo-editing>
+            <dxi-column dataField="idSubobjetivos" caption="Código" [width]="150" [allowEditing]="false"
+              alignment="center">
+            </dxi-column>
+            <dxi-column dataField="nombreSubobjetivo" caption="Nombre" alignment="center" [width]="300">
+            </dxi-column>
+            <dxi-column dataField="subObjetivo" caption="% Sub Objetivo" alignment="center">
+            </dxi-column>
+            <dxi-column dataField="idAreaNavigation.nombreArea" caption="Área" alignment="center">
+            </dxi-column>
+
+          </dx-data-grid>
+        </div>
+
       </dx-data-grid>
     </div>
   </div>

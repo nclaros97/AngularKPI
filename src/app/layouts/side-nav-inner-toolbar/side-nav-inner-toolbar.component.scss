@@ -10,7 +10,8 @@
 
 .layout-body {
   flex: 1;
-  min-height: 0;
+  min-height: calc(100vh - 100px);
+  height: 650px;
 }
 
 .content {

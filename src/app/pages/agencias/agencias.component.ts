@@ -24,7 +24,7 @@ export class AgenciasComponent implements OnInit {
   }
   addAgencia(agencia: Agencia): void {
     this.agenciaService.addAgencia(agencia).subscribe((resp: Agencia) => {
-      console.log(agencia);
+      agencia.idAgencia = resp.idAgencia;
     });
   }
   updateAgencia(agencia: Agencia): void {

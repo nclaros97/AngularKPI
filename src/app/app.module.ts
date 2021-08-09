@@ -12,8 +12,14 @@ import { AgenciaService } from './pages/agencias/services/agencia.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AreasComponent } from './pages/areas/areas.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DxDataGridModule } from 'devextreme-angular';
 import { ObjetivosComponent } from './pages/objetivos/objetivos.component';
+import {
+  DxNumberBoxModule,
+  DxCheckBoxModule,
+  DxSelectBoxModule,
+  DxScrollViewModule,
+  DxDataGridModule,
+  DxFormModule } from 'devextreme-angular';
 
 @NgModule({
   declarations: [
@@ -36,7 +42,12 @@ import { ObjetivosComponent } from './pages/objetivos/objetivos.component';
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    DxDataGridModule
+    DxDataGridModule,
+    DxScrollViewModule,
+    DxNumberBoxModule,
+    DxCheckBoxModule,
+    DxSelectBoxModule,
+    DxFormModule
   ],
   providers: [AuthService, ScreenService, AppInfoService, AgenciaService],
   bootstrap: [AppComponent]

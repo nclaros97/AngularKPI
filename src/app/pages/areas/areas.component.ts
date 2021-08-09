@@ -25,7 +25,7 @@ export class AreasComponent implements OnInit {
   }
   addAgencia(area: Area): void {
     this.areaService.addArea(area).subscribe((resp: Area) => {
-      console.log(resp);
+      area.idArea = resp.idArea;
     });
   }
   updateAgencia(area: Area): void {

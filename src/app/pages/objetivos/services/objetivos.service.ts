@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { apis } from 'src/environments/environment';
 import { Objetivo } from '../models/objetivo';
+import { SubObjetivo } from '../models/subObjetivo';
 
 const endpoint = apis.kpiApi;
 
@@ -38,6 +39,28 @@ export class ObjetivosService {
   deleteObjetivo(objetivoId: number): Observable<any> {
     debugger;
     return this.http.delete(endpoint + '/api/objetivoes/delete/'+objetivoId).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  addSubObjetivo(subObjetivo: SubObjetivo): Observable<any> {
+    return this.http.post(endpoint + '/api/subObjetivos/add',subObjetivo).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  updateSubObjetivo(subObjetivo: SubObjetivo): Observable<any> {
+    return this.http.put(endpoint + '/api/subObjetivos/edit/'+subObjetivo.idSubobjetivos,subObjetivo).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteSubObjetivo(objetivoId: number): Observable<any> {
+    debugger;
+    return this.http.delete(endpoint + '/api/subObjetivos/delete/'+objetivoId).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
