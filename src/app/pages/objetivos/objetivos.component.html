@@ -48,6 +48,8 @@
             (onRowRemoved)="deleteSubObjetivo($event.data.idSubobjetivos)"
             (onRowInserted)="addSubObjetivo($event.data)">
 
+            <dxo-master-detail [enabled]="true" template="areasSubObjetivos"></dxo-master-detail>
+
             <dxo-scrolling rowRenderingMode="virtual">
             </dxo-scrolling>
             <dxo-paging [pageSize]="5">
@@ -75,6 +77,51 @@
                 </div>
               </dxo-form>
             </dxo-editing>
+
+            <div *dxTemplate="let subObjetivo of 'areasSubObjetivos'">
+              <dx-data-grid [dataSource]="subObjetivo.data.subobjetivos.idAreaNavigation" [hoverStateEnabled]="true" [showBorders]="true"
+                [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
+                (onRowUpdated)="updateSubObjetivo($event.data)"
+                (onRowRemoved)="deleteSubObjetivo($event.data.idSubobjetivos)"
+                (onRowInserted)="addSubObjetivo($event.data)">
+
+                <dxo-master-detail [enabled]="true" template="areasSubObjetivos"></dxo-master-detail>
+
+                <dxo-scrolling rowRenderingMode="virtual">
+                </dxo-scrolling>
+                <dxo-paging [pageSize]="5">
+                </dxo-paging>
+                <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
+                  [showInfo]="true" [showNavigationButtons]="true">
+                </dxo-pager>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+                <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+                  <dxo-popup title="Areas de Sub Objetivos" [showTitle]="true" [width]="700" [height]="525">
+                  </dxo-popup>
+                  <dxo-form>
+                    <dxi-item template="areaSelectBox">
+                      <dxo-label text="Área"></dxo-label>
+                    </dxi-item>
+                    <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
+                      <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false"
+                        valueExpr="idArea" displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
+                      </dx-select-box>
+                    </div>
+                  </dxo-form>
+                </dxo-editing>
+
+                <dxi-column dataField="idArea" caption="Código" [width]="150" [allowEditing]="false"
+                  alignment="center">
+                </dxi-column>
+                <dxi-column dataField="nombreArea" caption="Nombre" alignment="center" [width]="300">
+                </dxi-column>
+
+              </dx-data-grid>
+            </div>
+
             <dxi-column dataField="idSubobjetivos" caption="Código" [width]="150" [allowEditing]="false"
               alignment="center">
             </dxi-column>

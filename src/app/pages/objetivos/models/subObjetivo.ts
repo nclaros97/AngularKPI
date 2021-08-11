@@ -8,5 +8,6 @@ export interface SubObjetivo {
   idObjetivo: number,
   subObjetivo: string,
   idAreaNavigation: Area,
-  objetivo: Objetivo
+  objetivo: Objetivo,
+  __KEY__: string
 }

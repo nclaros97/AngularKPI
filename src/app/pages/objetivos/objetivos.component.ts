@@ -24,7 +24,7 @@ export class ObjetivosComponent implements OnInit {
   areaId: number = 0;
   objetivoId: number = 0
   constructor(private objetivosService: ObjetivosService, private router: Router, private areasService: AreaService) {
-   }
+  }
 
   ngOnInit(): void {
     this.getObjetivos();
@@ -32,6 +32,7 @@ export class ObjetivosComponent implements OnInit {
   }
 
   getObjetivos(): void {
+    debugger;
     this.objetivosService.getObjetivos().subscribe((resp: Objetivo[]) => {
       this.objetivos = resp;
       console.log(this.objetivos);
@@ -59,30 +60,59 @@ export class ObjetivosComponent implements OnInit {
     });
   }
 
-  handleValueChange(event: any): void{
-    debugger;
+  handleValueChange(event: any): void {
     this.areaId = event.value;
   }
 
-  handleRowColapsed(event: Objetivo): void{
-    debugger;
+  handleRowColapsed(event: Objetivo): void {
     this.objetivoId = event.idObjetivo;
   }
 
   addSubObjetivo(subObjetivo: SubObjetivo): void {
-    debugger;
     subObjetivo.idArea = this.areaId;
     subObjetivo.idObjetivo = this.objetivoId;
-    this.objetivosService.addSubObjetivo(subObjetivo).subscribe((resp: SubObjetivo) => {
-      subObjetivo.idSubobjetivos = resp.idSubobjetivos;
-      subObjetivo.idAreaNavigation = this.areas.find(x=>x.idArea == resp.idArea) || {idArea:0,nombreArea:''};
-    });
+
+    let objetivo: Objetivo | undefined = undefined;
+    objetivo = this.objetivos.find(x => x.idObjetivo == this.objetivoId);
+    debugger;
+    if (this.sumaPorcentajeSubObjetivos(this.objetivoId) >= objetivo!.porcentajeObjetivo) {
+      alert("El porcentaje del sub objetivo excede el porcentaje del objetivo");
+
+      let key: string;
+      let objetivo = this.objetivos.find(x => x.idObjetivo == this.objetivoId);
+      objetivo!.subobjetivos.forEach((x) => {
+        if (x.__KEY__ != undefined) {
+          key = x.__KEY__;
+          this.removerFila(key);
+        }
+      });
+    } else {
+      this.objetivosService.addSubObjetivo(subObjetivo).subscribe((resp: SubObjetivo) => {
+        subObjetivo.idSubobjetivos = resp.idSubobjetivos;
+        subObjetivo.idAreaNavigation = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '' };
+      });
+    }
   }
+  sumaPorcentajeSubObjetivos(id: number): number {
+    let subObjetivos = this.objetivos.find(x=>x.idObjetivo == id)?.subobjetivos;
+    let totalPorcentaje:number=0;
+
+    subObjetivos?.forEach((x)=>{
+      totalPorcentaje += Number(x.subObjetivo);
+    });
+
+    return totalPorcentaje;
+  }
+  removerFila(key: string): void {
+    let index = this.objetivos.find(x => x.idObjetivo == this.objetivoId)?.subobjetivos.findIndex(x => x.__KEY__ == key);
+    this.objetivos.find(x => x.idObjetivo == this.objetivoId)?.subobjetivos.splice(index!, 1);
+  }
+
   updateSubObjetivo(subObjetivo: SubObjetivo): void {
     subObjetivo.idArea = this.areaId;
     subObjetivo.idObjetivo = this.objetivoId;
     this.objetivosService.updateSubObjetivo(subObjetivo).subscribe((resp: SubObjetivo) => {
-      subObjetivo.idAreaNavigation = this.areas.find(x=>x.idArea == resp.idArea) || {idArea:0,nombreArea:''};
+      subObjetivo.idAreaNavigation = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '' };
       console.log(subObjetivo);
     });
   }
