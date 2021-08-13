@@ -7,8 +7,7 @@
       <dx-data-grid [dataSource]="objetivos" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
         [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
         (onRowUpdated)="updateObjetivo($event.data)" (onRowRemoved)="deleteObjetivo($event.data.idObjetivo)"
-        (onRowInserted)="addObjetivo($event.data)"
-        (onRowExpanding)="handleRowColapsed($event.key)">
+        (onRowInserted)="addObjetivo($event.data)" (onRowExpanding)="handleRowColapsed($event.key)">
 
         <dxo-scrolling rowRenderingMode="virtual">
         </dxo-scrolling>
@@ -48,7 +47,7 @@
             (onRowRemoved)="deleteSubObjetivo($event.data.idSubobjetivos)"
             (onRowInserted)="addSubObjetivo($event.data)">
 
-            <dxo-master-detail [enabled]="true" template="areasSubObjetivos"></dxo-master-detail>
+            <!-- <dxo-master-detail [enabled]="true" template="areasSubObjetivos"></dxo-master-detail> -->
 
             <dxo-scrolling rowRenderingMode="virtual">
             </dxo-scrolling>
@@ -71,21 +70,19 @@
                   <dxo-label text="Área"></dxo-label>
                 </dxi-item>
                 <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
-                  <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false"
-                    valueExpr="idArea" displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
+                  <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false" valueExpr="idArea"
+                    displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
                   </dx-select-box>
                 </div>
               </dxo-form>
             </dxo-editing>
 
-            <div *dxTemplate="let subObjetivo of 'areasSubObjetivos'">
-              <dx-data-grid [dataSource]="subObjetivo.data.subobjetivos.idAreaNavigation" [hoverStateEnabled]="true" [showBorders]="true"
-                [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
-                (onRowUpdated)="updateSubObjetivo($event.data)"
-                (onRowRemoved)="deleteSubObjetivo($event.data.idSubobjetivos)"
-                (onRowInserted)="addSubObjetivo($event.data)">
-
-                <dxo-master-detail [enabled]="true" template="areasSubObjetivos"></dxo-master-detail>
+            <!-- <div *dxTemplate="let subObjetivo of 'areasSubObjetivos'">
+              <dx-data-grid [dataSource]="subObjetivo.data.idAreaNavigation" [hoverStateEnabled]="true"
+                [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true"
+                [showRowLines]="true" (onRowUpdated)="updateSubObjetivoArea($event.data)"
+                (onRowRemoved)="deleteSubObjetivoArea($event.data.idSubobjetivos)"
+                (onRowInserted)="addSubObjetivoArea($event.data)">
 
                 <dxo-scrolling rowRenderingMode="virtual">
                 </dxo-scrolling>
@@ -106,21 +103,20 @@
                       <dxo-label text="Área"></dxo-label>
                     </dxi-item>
                     <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
-                      <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false"
-                        valueExpr="idArea" displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
+                      <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false" valueExpr="idArea"
+                        displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
                       </dx-select-box>
                     </div>
                   </dxo-form>
                 </dxo-editing>
 
-                <dxi-column dataField="idArea" caption="Código" [width]="150" [allowEditing]="false"
-                  alignment="center">
+                <dxi-column dataField="idArea" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
                 </dxi-column>
                 <dxi-column dataField="nombreArea" caption="Nombre" alignment="center" [width]="300">
                 </dxi-column>
 
               </dx-data-grid>
-            </div>
+            </div> -->
 
             <dxi-column dataField="idSubobjetivos" caption="Código" [width]="150" [allowEditing]="false"
               alignment="center">

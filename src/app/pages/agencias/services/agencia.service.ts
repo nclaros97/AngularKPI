@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { apis } from 'src/environments/environment';
 import { Agencia } from '../models/agencia';
+import { AreaAgencia } from '../models/areaAgencia';
 
 const endpoint = apis.kpiApi;
 
@@ -21,6 +22,14 @@ export class AgenciaService {
       catchError(this.handleError)
     );
   }
+
+  getIndicadores(): Observable<any> {
+    return this.http.get(endpoint + '/api/indicadores').pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
   addAgencia(agencia: Agencia): Observable<any> {
     return this.http.post(endpoint + '/api/agencias/add',agencia).pipe(
       map(this.extractData),
@@ -38,6 +47,29 @@ export class AgenciaService {
   deleteAgencia(agenciaId: number): Observable<any> {
     debugger;
     return this.http.delete(endpoint + '/api/agencias/delete/'+agenciaId).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  addAgenciaArea(areaAgencia: AreaAgencia): Observable<any> {
+    return this.http.post(endpoint + '/api/areaAgencias/add',areaAgencia).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  updateAgenciaArea(areaAgencia: AreaAgencia): Observable<any> {
+    debugger;
+    return this.http.put(endpoint + '/api/areaAgencias/edit/'+areaAgencia.idAreaAgencia,areaAgencia).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteAgenciaArea(areaAgenciaId: number): Observable<any> {
+    debugger;
+    return this.http.delete(endpoint + '/api/areaAgencias/delete/'+areaAgenciaId).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );

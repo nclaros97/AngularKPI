@@ -66,6 +66,28 @@ export class ObjetivosService {
     );
   }
 
+  addSubObjetivoArea(subObjetivoArea: SubObjetivo): Observable<any> {
+    return this.http.post(endpoint + '/api/subobjetivosAreas/add',subObjetivoArea).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  updateSubObjetivoArea(subObjetivoArea: SubObjetivo): Observable<any> {
+    return this.http.put(endpoint + '/api/subobjetivosAreas/edit/'+subObjetivoArea.idSubobjetivos,subObjetivoArea).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteSubObjetivoArea(subObjetivoAreaId: number): Observable<any> {
+    debugger;
+    return this.http.delete(endpoint + '/api/subobjetivosAreas/delete/'+subObjetivoAreaId).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
   private extractData(res: any): any {
     const body = res;
     return body || { };
