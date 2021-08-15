@@ -5,6 +5,7 @@ export interface AreaAgencia {
   idArea: number,
   idAgencia: number,
   idCodigoIndiador: number,
-  area:Area,
+  indicadorDto: any;
+  areaDto:Area,
   nombreArea: string
 }

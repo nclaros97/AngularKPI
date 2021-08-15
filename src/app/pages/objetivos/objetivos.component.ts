@@ -69,7 +69,7 @@ export class ObjetivosComponent implements OnInit {
     this.objetivoId = event.idObjetivo;
   }
   sumaPorcentajeSubObjetivos(id: number): number {
-    let subObjetivos = this.objetivos.find(x=>x.idObjetivo == id)?.subobjetivos;
+    let subObjetivos = this.objetivos.find(x=>x.idObjetivo == id)?.subObjetivoDto;
     let totalPorcentaje:number=0;
 
     subObjetivos?.forEach((x)=>{
@@ -79,8 +79,8 @@ export class ObjetivosComponent implements OnInit {
     return totalPorcentaje;
   }
   removerFila(key: string): void {
-    let index = this.objetivos.find(x => x.idObjetivo == this.objetivoId)?.subobjetivos.findIndex(x => x.__KEY__ == key);
-    this.objetivos.find(x => x.idObjetivo == this.objetivoId)?.subobjetivos.splice(index!, 1);
+    let index = this.objetivos.find(x => x.idObjetivo == this.objetivoId)?.subObjetivoDto.findIndex(x => x.__KEY__ == key);
+    this.objetivos.find(x => x.idObjetivo == this.objetivoId)?.subObjetivoDto.splice(index!, 1);
   }
 
   addSubObjetivo(subObjetivo: SubObjetivo): void {
@@ -95,7 +95,7 @@ export class ObjetivosComponent implements OnInit {
 
       let key: string;
       let objetivo = this.objetivos.find(x => x.idObjetivo == this.objetivoId);
-      objetivo!.subobjetivos.forEach((x) => {
+      objetivo!.subObjetivoDto.forEach((x) => {
         if (x.__KEY__ != undefined) {
           key = x.__KEY__;
           this.removerFila(key);
@@ -104,7 +104,7 @@ export class ObjetivosComponent implements OnInit {
     } else {
       this.objetivosService.addSubObjetivo(subObjetivo).subscribe((resp: SubObjetivo) => {
         subObjetivo.idSubobjetivos = resp.idSubobjetivos;
-        subObjetivo.idAreaNavigation = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
+        subObjetivo.areaDto = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
       });
     }
   }
@@ -112,7 +112,7 @@ export class ObjetivosComponent implements OnInit {
     subObjetivo.idArea = this.areaId;
     subObjetivo.idObjetivo = this.objetivoId;
     this.objetivosService.updateSubObjetivo(subObjetivo).subscribe((resp: SubObjetivo) => {
-      subObjetivo.idAreaNavigation = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
+      subObjetivo.areaDto = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
       console.log(subObjetivo);
     });
   }
@@ -134,7 +134,7 @@ export class ObjetivosComponent implements OnInit {
 
       let key: string;
       let objetivo = this.objetivos.find(x => x.idObjetivo == this.objetivoId);
-      objetivo!.subobjetivos.forEach((x) => {
+      objetivo!.subObjetivoDto.forEach((x) => {
         if (x.__KEY__ != undefined) {
           key = x.__KEY__;
           this.removerFila(key);
@@ -143,7 +143,7 @@ export class ObjetivosComponent implements OnInit {
     } else {
       this.objetivosService.addSubObjetivo(subObjetivoArea).subscribe((resp: SubObjetivo) => {
         subObjetivoArea.idSubobjetivos = resp.idSubobjetivos;
-        subObjetivoArea.idAreaNavigation = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
+        subObjetivoArea.areaDto = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
       });
     }
   }
@@ -151,7 +151,7 @@ export class ObjetivosComponent implements OnInit {
     subObjetivoArea.idArea = this.areaId;
     subObjetivoArea.idObjetivo = this.objetivoId;
     this.objetivosService.updateSubObjetivo(subObjetivoArea).subscribe((resp: SubObjetivo) => {
-      subObjetivoArea.idAreaNavigation = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
+      subObjetivoArea.areaDto = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
       console.log(subObjetivoArea);
     });
   }

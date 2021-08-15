@@ -9,6 +9,7 @@ import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 import { AgenciasComponent } from './pages/agencias/agencias.component';
 import { AreasComponent } from './pages/areas/areas.component';
 import { ObjetivosComponent } from './pages/objetivos/objetivos.component';
+import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: 'objetivos',
     component: ObjetivosComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'indicadores',
+    component: IndicadoresComponent,
     canActivate: [ AuthGuardService ]
   },
   {

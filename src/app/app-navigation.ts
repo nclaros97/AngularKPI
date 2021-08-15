@@ -20,6 +20,10 @@ export const navigation = [
         text: 'Objetivos',
         path: '/objetivos'
       },
+      {
+        text: 'Indicadores',
+        path: '/indicadores'
+      },
     ]
   }
 ];

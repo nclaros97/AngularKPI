@@ -2,16 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Agencia } from './models/agencia';
 import { AgenciaService } from './services/agencia.service';
-import DataGrid from "devextreme/ui/data_grid";
 import { Area } from '../areas/models/area';
 import { AreaService } from '../areas/services/area.service';
 import { AreaAgencia } from './models/areaAgencia';
+import { variablesGenerales } from 'src/app/shared/variables/variables';
 
 @Component({
   selector: 'app-agencias',
   templateUrl: './agencias.component.html',
   styleUrls: ['./agencias.component.scss']
 })
+
 export class AgenciasComponent implements OnInit {
 
   agencias: Agencia[] = [];
@@ -20,7 +21,7 @@ export class AgenciasComponent implements OnInit {
   areas: Area[] = [];
   indicadorId: number = 0;
   indicadores: any[] = [];
-
+  textoEditarRowGrid : any = variablesGenerales.textoEditarRowGrid;
   constructor(private agenciaService: AgenciaService, private router: Router, private areasService: AreaService) { }
 
   ngOnInit(): void {
@@ -66,20 +67,25 @@ export class AgenciasComponent implements OnInit {
     areaAgencia.idAgencia = this.agenciaId;
     areaAgencia.idArea = this.areaId;
     areaAgencia.idCodigoIndiador = this.indicadorId;
-    this.agenciaService.addAgenciaArea(areaAgencia).subscribe((resp: Agencia) => {
+    this.agenciaService.addAgenciaArea(areaAgencia).subscribe((resp: AreaAgencia) => {
       areaAgencia.idAgencia = resp.idAgencia;
-      areaAgencia.area = this.areas.find(x => x.idArea == this.areaId) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
-      areaAgencia.nombreArea = areaAgencia.area.nombreArea;
+      areaAgencia.idAreaAgencia = resp.idAreaAgencia;
+      areaAgencia.areaDto = this.areas.find(x => x.idArea == this.areaId) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
+      areaAgencia.indicadorDto = this.indicadores.find(x => x.idCodigoIndiador == this.indicadorId) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
+      areaAgencia.areaDto.nombreArea = areaAgencia.areaDto.nombreArea;
     });
   }
   updateAgenciaArea(areaAgencia: AreaAgencia): void {
     debugger;
-    this.agenciaService.updateAgenciaArea(areaAgencia).subscribe((resp: Agencia) => {
+    areaAgencia.idAgencia = this.agenciaId;
+    areaAgencia.idArea = this.areaId;
+    areaAgencia.idCodigoIndiador = this.indicadorId;
+    this.agenciaService.updateAgenciaArea(areaAgencia).subscribe((resp: AreaAgencia) => {
       console.log(areaAgencia);
     });
   }
   deleteAgenciaArea(agenciaAreaId: number): void {
-    this.agenciaService.deleteAgenciaArea(agenciaAreaId).subscribe((resp: Agencia) => {
+    this.agenciaService.deleteAgenciaArea(agenciaAreaId).subscribe((resp: AreaAgencia) => {
       console.log(resp);
     });
   }

@@ -4,5 +4,5 @@ export interface Objetivo{
   idObjetivo: number,
   nombreObjetivo: string,
   porcentajeObjetivo: number
-  subobjetivos: SubObjetivo[]
+  subObjetivoDto: SubObjetivo[]
 }

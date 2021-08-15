@@ -1,0 +1,69 @@
+<div class="container-fluid mt-10">
+    <div class="card">
+        <div class="card-header">
+            <h4>Lista de Indicadores</h4>
+        </div>
+        <div class="card-body">
+            <dx-data-grid [dataSource]="indicadores" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateIndicador($event.data)" (onRowRemoved)="deleteIndicador($event.data.idCodigoIndiador)"
+                (onRowInserted)="addIndicador($event.data)">
+
+                <dxo-scrolling rowRenderingMode="virtual">
+                </dxo-scrolling>
+                <dxo-paging [pageSize]="10">
+                </dxo-paging>
+                <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true">
+                </dxo-pager>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+                <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+                    <dxo-popup title="Indicador" [showTitle]="true" [width]="700" [height]="525">
+                    </dxo-popup>
+                    <dxo-form>
+                        <dxi-item dataField="nombreIndicador"></dxi-item>
+                        <dxi-item dataField="proceso" caption="Proceso" alignment="center">
+                        </dxi-item>
+                        <dxi-item dataField="formula" caption="Formula" alignment="center">
+                        </dxi-item>
+                        <dxi-item dataField="detalle" caption="Detalle" alignment="center">
+                        </dxi-item>
+                        <dxi-item dataField="estado" caption="Estado" alignment="center">
+                        </dxi-item>
+                        <dxi-item dataField="responsables" caption="Responsable" alignment="center">
+                        </dxi-item>
+                        <dxi-item template="tiempoSelectBox">
+                            <dxo-label text="Tiempo"></dxo-label>
+                        </dxi-item>
+                        <div *dxTemplate="let selectBoxItem of 'tiempoSelectBox'">
+                            <dx-select-box [(value)]="tiempoId" [dataSource]="tiempos" [deferRendering]="false" valueExpr="idTiempo" displayExpr="nombrePeriodo" (onValueChanged)="handleValueChange($event)">
+                            </dx-select-box>
+                        </div>
+                        <dxi-item template="subObjetivoSelectBox">
+                            <dxo-label text="Sub Objetivo"></dxo-label>
+                        </dxi-item>
+                        <div *dxTemplate="let selectBoxItem of 'subObjetivoSelectBox'">
+                            <dx-select-box [(value)]="subObjetivoId" [dataSource]="subObjetivos" [deferRendering]="false" valueExpr="idSubobjetivos" displayExpr="nombreSubobjetivo" (onValueChanged)="handleValueSubObjetivoChange($event)">
+                            </dx-select-box>
+                        </div>
+                    </dxo-form>
+                </dxo-editing>
+
+                <dxi-column dataField="idCodigoIndiador" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="nombreIndicador" caption="Indicador" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="proceso" caption="Proceso" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="formula" caption="Formula" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="detalle" caption="Detalle" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="estado" caption="Estado" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="responsables" caption="Responsable" alignment="center">
+                </dxi-column>
+            </dx-data-grid>
+        </div>
+    </div>
+
+</div>

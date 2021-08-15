@@ -1,92 +1,85 @@
 <div class="container-fluid mt-10">
-  <div class="card">
-    <div class="card-header">
-      <h4>Lista de Agencias</h4>
-    </div>
-    <div class="card-body">
-      <dx-data-grid [dataSource]="agencias" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
-        [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
-        (onRowUpdated)="updateAgencia($event.data)"
-        (onRowRemoved)="deleteAgencia($event.data.idAgencia)"
-        (onRowInserted)="addAgencia($event.data)"
-        (onRowExpanding)="handleRowColapsed($event.key)">
-        <dxo-scrolling rowRenderingMode="virtual">
-        </dxo-scrolling>
-        <dxo-paging [pageSize]="10">
-        </dxo-paging>
-        <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
-          [showInfo]="true" [showNavigationButtons]="true" [showPageSizeSelector]="true">
-        </dxo-pager>
-        <dxo-filter-row [visible]="true"></dxo-filter-row>
-        <dxo-header-filter [visible]="true"></dxo-header-filter>
-
-        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
-          <dxo-popup title="Agencias" [showTitle]="true" [width]="700" [height]="525">
-          </dxo-popup>
-          <dxo-form>
-            <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
-              <dxi-item dataField="nombreAgencia"></dxi-item>
-            </dxi-item>
-          </dxo-form>
-        </dxo-editing>
-
-        <dxo-master-detail [enabled]="true" template="areasAgencia"></dxo-master-detail>
-
-        <div *dxTemplate="let areaAgencia of 'areasAgencia'">
-          <dx-data-grid [dataSource]="areaAgencia.data.areas" [hoverStateEnabled]="true"
-            [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true"
-            [showRowLines]="true" (onRowUpdated)="updateAgenciaArea($event.data)"
-            (onRowRemoved)="deleteAgenciaArea($event.data.idAreaAgencia)"
-            (onRowInserted)="addAgenciaArea($event.data)">
-
-            <dxo-scrolling rowRenderingMode="virtual">
-            </dxo-scrolling>
-            <dxo-paging [pageSize]="5">
-            </dxo-paging>
-            <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
-              [showInfo]="true" [showNavigationButtons]="true">
-            </dxo-pager>
-            <dxo-filter-row [visible]="true"></dxo-filter-row>
-            <dxo-header-filter [visible]="true"></dxo-header-filter>
-            <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-
-            <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
-              <dxo-popup title="Áreas" [showTitle]="true" [width]="700" [height]="525">
-              </dxo-popup>
-              <dxo-form>
-                <dxi-item template="areaSelectBox">
-                  <dxo-label text="Área"></dxo-label>
-                </dxi-item>
-                <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
-                  <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false" valueExpr="idArea"
-                    displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
-                  </dx-select-box>
-                </div>
-                <dxi-item template="indicadorSelectBox">
-                  <dxo-label text="Indicador"></dxo-label>
-                </dxi-item>
-                <div *dxTemplate="let selectBoxItem of 'indicadorSelectBox'">
-                  <dx-select-box [(value)]="indicadorId" [dataSource]="indicadores" [deferRendering]="false" valueExpr="idCodigoIndiador"
-                    displayExpr="nombreIndicador" (onValueChanged)="handleValueIndicadoresChange($event)">
-                  </dx-select-box>
-                </div>
-              </dxo-form>
-            </dxo-editing>
-
-            <dxi-column dataField="idAreaAgencia" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
-            </dxi-column>
-            <dxi-column dataField="nombreArea" caption="Nombre" alignment="center" [width]="300">
-            </dxi-column>
-
-          </dx-data-grid>
+    <div class="card">
+        <div class="card-header">
+            <h4>Lista de Agencias</h4>
         </div>
+        <div class="card-body">
+            <dx-data-grid [dataSource]="agencias" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" [wordWrapEnabled]="true" (onRowUpdated)="updateAgencia($event.data)"
+                (onRowRemoved)="deleteAgencia($event.data.idAgencia)" (onRowInserted)="addAgencia($event.data)" (onRowExpanding)="handleRowColapsed($event.key)">
+                <dxo-scrolling rowRenderingMode="virtual">
+                </dxo-scrolling>
+                <dxo-paging [pageSize]="10">
+                </dxo-paging>
+                <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true" [showPageSizeSelector]="true">
+                </dxo-pager>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
 
-        <dxi-column dataField="idAgencia" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
-        </dxi-column>
-        <dxi-column dataField="nombreAgencia" caption="Agencia" alignment="center">
-        </dxi-column>
-      </dx-data-grid>
+                <dxo-master-detail [enabled]="true" template="areasAgencias"></dxo-master-detail>
+
+                <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
+                    <dxo-popup title="Agencias" [showTitle]="true" [width]="700" [height]="525">
+                    </dxo-popup>
+                    <dxo-form>
+                        <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
+                            <dxi-item dataField="nombreAgencia"></dxi-item>
+                        </dxi-item>
+                    </dxo-form>
+                </dxo-editing>
+
+                <dxi-column dataField="idAgencia" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
+                </dxi-column>
+                <dxi-column dataField="nombreAgencia" caption="Agencia" alignment="center">
+                </dxi-column>
+
+                <div *dxTemplate="let areaAgencia of 'areasAgencias'">
+                    <dx-data-grid [dataSource]="areaAgencia.data.areaAgenciaDtos" [hoverStateEnabled]="true" [wordWrapEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateAgenciaArea($event.data)"
+                        (onRowRemoved)="deleteAgenciaArea($event.data.idAreaAgencia)" (onRowInserted)="addAgenciaArea($event.data)">
+
+                        <dxo-scrolling rowRenderingMode="virtual">
+                        </dxo-scrolling>
+                        <dxo-paging [pageSize]="5">
+                        </dxo-paging>
+                        <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true">
+                        </dxo-pager>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-header-filter [visible]="true"></dxo-header-filter>
+                        <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+
+                        <dxo-editing mode="popup" [allowUpdating]="false" [allowAdding]="true" [allowDeleting]="true">
+                            <dxo-popup title="Áreas" [showTitle]="true" [width]="700" [height]="525">
+                            </dxo-popup>
+                            <dxo-form>
+                                <dxi-item dataField="idAreaAgencia"></dxi-item>
+                                <dxi-item template="areaSelectBox">
+                                    <dxo-label text="Área"></dxo-label>
+                                </dxi-item>
+                                <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
+                                    <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false" valueExpr="idArea" displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
+                                    </dx-select-box>
+                                </div>
+                                <dxi-item template="indicadorSelectBox">
+                                    <dxo-label text="Indicador"></dxo-label>
+                                </dxi-item>
+                                <div *dxTemplate="let selectBoxItem of 'indicadorSelectBox'">
+                                    <dx-select-box [(value)]="indicadorId" [dataSource]="indicadores" [deferRendering]="false" valueExpr="idCodigoIndiador" displayExpr="nombreIndicador" (onValueChanged)="handleValueIndicadoresChange($event)">
+                                    </dx-select-box>
+                                </div>
+                            </dxo-form>
+                        </dxo-editing>
+
+                        <dxi-column dataField="idAreaAgencia" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="areaDto.nombreArea" caption="Nombre" alignment="center" [width]="300">
+                        </dxi-column>
+                        <dxi-column dataField="indicadorDto.nombreIndicador" caption="Indicador" alignment="center" [width]="300">
+                        </dxi-column>
+
+                    </dx-data-grid>
+                </div>
+
+            </dx-data-grid>
+        </div>
     </div>
-  </div>
 
 </div>

@@ -20,13 +20,15 @@ import {
   DxScrollViewModule,
   DxDataGridModule,
   DxFormModule } from 'devextreme-angular';
+import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AgenciasComponent,
     AreasComponent,
-    ObjetivosComponent
+    ObjetivosComponent,
+    IndicadoresComponent
   ],
   imports: [
     BrowserModule,
