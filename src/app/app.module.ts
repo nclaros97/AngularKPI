@@ -21,6 +21,7 @@ import {
   DxDataGridModule,
   DxFormModule } from 'devextreme-angular';
 import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
+import { TiemposComponent } from './pages/tiempos/tiempos.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { IndicadoresComponent } from './pages/indicadores/indicadores.component'
     AgenciasComponent,
     AreasComponent,
     ObjetivosComponent,
-    IndicadoresComponent
+    IndicadoresComponent,
+    TiemposComponent
   ],
   imports: [
     BrowserModule,

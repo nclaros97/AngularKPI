@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Indicador } from './models/indicadores';
 import { IndicadoresServices } from './services/indicadoresServices';
 import { SubObjetivo } from '../objetivos/models/subObjetivo';
+import { variablesGenerales } from 'src/app/shared/variables/variables';
 
 @Component({
   selector: 'app-indicadores',
@@ -18,6 +19,7 @@ export class IndicadoresComponent implements OnInit {
   tiempoId: number = 0;
   subObjetivoId: number = 0;
   subObjetivos: SubObjetivo[] = [];
+  textoEditarRowGrid : any = variablesGenerales.textoEditarRowGrid;
 
   ngOnInit(): void {
     this.getIndicadores();

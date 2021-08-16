@@ -19,7 +19,7 @@
 
                 <dxo-master-detail [enabled]="true" template="subObjetivos"></dxo-master-detail>
 
-                <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+                <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
                     <dxo-popup title="Objetivos" [showTitle]="true" [width]="700" [height]="525">
                     </dxo-popup>
                     <dxo-form>
@@ -51,7 +51,7 @@
                         <dxo-header-filter [visible]="true"></dxo-header-filter>
                         <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
 
-                        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true">
+                        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
                             <dxo-popup title="Sub Objetivos" [showTitle]="true" [width]="700" [height]="525">
                             </dxo-popup>
                             <dxo-form>

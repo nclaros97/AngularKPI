@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
+import { variablesGenerales } from 'src/app/shared/variables/variables';
 import { Area } from '../areas/models/area';
 import { AreaService } from '../areas/services/area.service';
 import { Objetivo } from './models/objetivo';
@@ -23,6 +24,8 @@ export class ObjetivosComponent implements OnInit {
   showDataBeforeSearchOption: boolean = false;
   areaId: number = 0;
   objetivoId: number = 0;
+  textoEditarRowGrid : any = variablesGenerales.textoEditarRowGrid;
+
   constructor(private objetivosService: ObjetivosService, private router: Router, private areasService: AreaService) {
   }
 

@@ -24,6 +24,10 @@ export const navigation = [
         text: 'Indicadores',
         path: '/indicadores'
       },
+      {
+        text: 'Tiempos',
+        path: '/tiempos'
+      },
     ]
   }
 ];

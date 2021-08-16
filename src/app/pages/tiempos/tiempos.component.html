@@ -1,11 +1,11 @@
 <div class="container-fluid mt-10">
     <div class="card">
         <div class="card-header">
-            <h4>Lista de Areas</h4>
+            <h4>Lista de Tiempos</h4>
         </div>
         <div class="card-body">
-            <dx-data-grid [dataSource]="areas" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateArea($event.data)" (onRowRemoved)="deleteArea($event.data.idArea)"
-                (onRowInserted)="addArea($event.data)">
+            <dx-data-grid [dataSource]="tiempos" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateTiempo($event.data)" (onRowRemoved)="deleteTiempo($event.data.idTiempo)"
+                (onRowInserted)="addTiempo($event.data)">
 
                 <dxo-scrolling rowRenderingMode="virtual">
                 </dxo-scrolling>
@@ -17,18 +17,18 @@
                 <dxo-header-filter [visible]="true"></dxo-header-filter>
 
                 <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
-                    <dxo-popup title="Áreas" [showTitle]="true" [width]="700" [height]="525">
+                    <dxo-popup title="Tiempos" [showTitle]="true" [width]="700" [height]="525">
                     </dxo-popup>
                     <dxo-form>
                         <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
-                            <dxi-item dataField="nombreArea"></dxi-item>
+                            <dxi-item dataField="nombrePeriodo"></dxi-item>
                         </dxi-item>
                     </dxo-form>
                 </dxo-editing>
 
-                <dxi-column dataField="idArea" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
+                <dxi-column dataField="idTiempo" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
                 </dxi-column>
-                <dxi-column dataField="nombreArea" caption="Área" alignment="center">
+                <dxi-column dataField="nombrePeriodo" caption="Tiempo" alignment="center">
                 </dxi-column>
             </dx-data-grid>
         </div>

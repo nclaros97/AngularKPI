@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { variablesGenerales } from 'src/app/shared/variables/variables';
 import { Area } from './models/area';
 import { AreaService } from './services/area.service';
 
@@ -11,7 +12,7 @@ import { AreaService } from './services/area.service';
 export class AreasComponent implements OnInit {
 
   areas: Area[] = []
-
+  textoEditarRowGrid : any = variablesGenerales.textoEditarRowGrid;
   constructor(private areaService: AreaService, private router: Router) { }
 
   ngOnInit(): void {
@@ -23,18 +24,18 @@ export class AreasComponent implements OnInit {
       this.areas = resp;
     });
   }
-  addAgencia(area: Area): void {
+  addArea(area: Area): void {
     this.areaService.addArea(area).subscribe((resp: Area) => {
       area.idArea = resp.idArea;
     });
   }
-  updateAgencia(area: Area): void {
+  updateArea(area: Area): void {
     this.areaService.updateArea(area).subscribe((resp: Area) => {
       console.log(resp);
     });
   }
-  deleteAgencia(agenciaId: number): void {
-    this.areaService.deleteArea(agenciaId).subscribe((resp: Area) => {
+  deleteArea(areaId: number): void {
+    this.areaService.deleteArea(areaId).subscribe((resp: Area) => {
       console.log(resp);
     });
   }
