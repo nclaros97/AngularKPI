@@ -19,7 +19,10 @@ import {
   DxSelectBoxModule,
   DxScrollViewModule,
   DxDataGridModule,
-  DxFormModule } from 'devextreme-angular';
+  DxFormModule,
+  DxTextAreaModule,
+  DxLookupModule,
+  DxDropDownBoxModule } from 'devextreme-angular';
 import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 import { TiemposComponent } from './pages/tiempos/tiempos.component';
 
@@ -51,7 +54,10 @@ import { TiemposComponent } from './pages/tiempos/tiempos.component';
     DxNumberBoxModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
-    DxFormModule
+    DxFormModule,
+    DxTextAreaModule,
+    DxLookupModule,
+    DxDropDownBoxModule
   ],
   providers: [AuthService, ScreenService, AppInfoService, AgenciaService],
   bootstrap: [AppComponent]

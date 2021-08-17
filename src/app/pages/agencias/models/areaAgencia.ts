@@ -7,5 +7,6 @@ export interface AreaAgencia {
   idCodigoIndiador: number,
   indicadorDto: any;
   areaDto:Area,
-  nombreArea: string
+  nombreArea: string,
+  agenciaDto: AreaAgencia
 }

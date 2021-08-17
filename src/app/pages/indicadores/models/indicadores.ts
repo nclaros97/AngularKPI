@@ -1,4 +1,6 @@
 import { SubObjetivo } from "../../objetivos/models/subObjetivo";
+import { Tiempo } from "../../tiempos/models/tiempo";
+import { Meta } from './meta';
 
 export interface Indicador {
   idCodigoIndiador: number,
@@ -10,6 +12,7 @@ export interface Indicador {
   idTiempo: number,
   estado: string,
   responsables: string
-  idSubobjetivosNavigation: SubObjetivo,
-  idTiempoNavigation: any
+  subObjetivoDto: SubObjetivo,
+  tiempoDto: Tiempo
+  metaDto: Meta
 }

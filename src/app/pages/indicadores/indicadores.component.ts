@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Indicador } from './models/indicadores';
 import { IndicadoresServices } from './services/indicadoresServices';
 import { SubObjetivo } from '../objetivos/models/subObjetivo';
 import { variablesGenerales } from 'src/app/shared/variables/variables';
+import { AgenciaService } from '../agencias/services/agencia.service';
+import { AreaService } from '../areas/services/area.service';
+import { AreaAgencia } from '../agencias/models/areaAgencia';
+import CustomStore from 'devextreme/data/custom_store';
+import { Meta } from './models/meta';
 
 @Component({
   selector: 'app-indicadores',
@@ -12,19 +17,41 @@ import { variablesGenerales } from 'src/app/shared/variables/variables';
 })
 export class IndicadoresComponent implements OnInit {
 
-  constructor(private indicadoresServices: IndicadoresServices, private router: Router) { }
+  constructor(private indicadoresServices: IndicadoresServices, private router: Router, private ref: ChangeDetectorRef) { }
 
   indicadores: Indicador[] = [];
   tiempos: any[] = [];
+  areasAgencias: AreaAgencia[] = [];
+  gridDataSource: any;
   tiempoId: number = 0;
+  areaAgenciaId: number = 0;
   subObjetivoId: number = 0;
   subObjetivos: SubObjetivo[] = [];
-  textoEditarRowGrid : any = variablesGenerales.textoEditarRowGrid;
+  textoEditarRowGrid: any = variablesGenerales.textoEditarRowGrid;
+
+  gridBoxValue: number[] = [3];
+  isGridBoxOpened: boolean = false;
+  gridColumns: any = [
+    {
+      dataField: 'idAreaAgencia',
+      caption: 'Código'
+    },
+    {
+      dataField: 'areaDto.nombreArea',
+      caption: 'Área'
+    },
+    {
+      dataField: 'agenciaDto.nombreAgencia',
+      caption: 'Agencia'
+    }
+  ];
 
   ngOnInit(): void {
     this.getIndicadores();
     this.getTiempos();
     this.getSubObjetivos();
+    this.getAreasAgencias();
+    this.isGridBoxOpened = false;
   }
 
   getIndicadores(): void {
@@ -45,6 +72,29 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
+  getMetas(): void {
+    this.indicadoresServices.getTiempos().subscribe((resp: any[]) => {
+      this.tiempos = resp;
+    });
+  }
+
+  getAreasAgencias(): void {
+    this.indicadoresServices.getAreasAgencias().subscribe((resp: any[]) => {
+      this.areasAgencias = resp;
+      this.gridDataSource = this.makeDataSource(this.areasAgencias);
+    });
+  }
+
+  makeDataSource(areasAgencias: any){
+    return new CustomStore({
+        loadMode: "raw",
+        key: "idAreaAgencia",
+        load: function() {
+            return areasAgencias;
+        }
+    });
+};
+
   addIndicador(indicador: Indicador): void {
     indicador.idTiempo = this.tiempoId;
     indicador.idSubobjetivos = this.subObjetivoId;
@@ -63,11 +113,52 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
+  addMeta(indicador: Indicador): void {
+    indicador.idTiempo = this.tiempoId;
+    indicador.idSubobjetivos = this.subObjetivoId;
+    this.indicadoresServices.addIndicador(indicador).subscribe((resp: Indicador) => {
+      indicador.idCodigoIndiador = resp.idCodigoIndiador;
+    });
+  }
+  updateMeta(indicador: Indicador): void {
+    this.indicadoresServices.updateIndicador(indicador).subscribe((resp: Indicador) => {
+      console.log(resp);
+    });
+  }
+  deleteMeta(meta: Meta): void {
+    this.indicadoresServices.deleteMeta(meta).subscribe((resp: Meta) => {
+      console.log(resp);
+    });
+  }
+
   handleValueChange(event: any): void {
     this.tiempoId = event.value;
   }
   handleValueSubObjetivoChange(event: any): void {
     this.subObjetivoId = event.value;
+  }
+
+  handleValueAreaAgenciaChange(event: any): void {
+    this.areaAgenciaId = event.value;
+  }
+
+  contentReady(e: any): void {
+    if (!e.component.getSelectedRowKeys().length)
+      e.component.selectRowsByIndexes(0);
+  }
+  selectionChanged(e: any): void {
+    e.component.collapseAll(-1);
+    e.component.expandRow(e.currentSelectedRowKeys[0]);
+  }
+  gridBox_displayExpr(e: any) {
+    return e && "Área: "+e.areaDto.nombreArea +" || Agencia: "+ e.agenciaDto.nombreAgencia;
+  }
+
+  onGridBoxOptionChanged(e: any) {
+    if (e.name === "value") {
+      this.isGridBoxOpened = false;
+      this.ref.detectChanges();
+    }
   }
 
 }

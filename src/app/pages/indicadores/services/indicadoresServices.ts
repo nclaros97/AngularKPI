@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { apis } from 'src/environments/environment';
 import { Indicador } from '../models/indicadores';
+import { Meta } from '../models/meta';
 
 const endpoint = apis.kpiApi + "/api/indicadores/";
 const endpointTiempos = apis.kpiApi + "/api/tiempos/";
@@ -16,7 +17,7 @@ export class IndicadoresServices {
 
   constructor(private http: HttpClient) { }
 
-  getTiempos(): Observable<any>{
+  getTiempos(): Observable<any> {
     return this.http.get(endpointTiempos).pipe(
       map(this.extractData),
       catchError(this.handleError)
@@ -37,15 +38,22 @@ export class IndicadoresServices {
     );
   }
 
+  getAreasAgencias(): Observable<any> {
+    return this.http.get(apis.kpiApi + "/api/areaAgencias/selectBox").pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
   addIndicador(indicador: Indicador): Observable<any> {
-    return this.http.post(endpoint + 'add',indicador).pipe(
+    return this.http.post(endpoint + 'add', indicador).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
   }
 
   updateIndicador(indicador: Indicador): Observable<any> {
-    return this.http.put(endpoint + 'edit/'+indicador.idCodigoIndiador,indicador).pipe(
+    return this.http.put(endpoint + 'edit/' + indicador.idCodigoIndiador, indicador).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
@@ -53,7 +61,20 @@ export class IndicadoresServices {
 
   deleteIndicador(indicadorId: number): Observable<any> {
     debugger;
-    return this.http.delete(endpoint + 'delete/'+indicadorId).pipe(
+    return this.http.delete(endpoint + 'delete/' + indicadorId).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteMeta(meta: Meta): Observable<any> {
+    debugger;
+
+    return this.http.request('DELETE', apis.kpiApi + '/api/metas/delete/', {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }), body: meta
+    }).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );
@@ -61,7 +82,7 @@ export class IndicadoresServices {
 
   private extractData(res: any): any {
     const body = res;
-    return body || { };
+    return body || {};
   }
 
   private handleError(error: HttpErrorResponse): any {
@@ -71,6 +92,7 @@ export class IndicadoresServices {
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
+        console.log(error);
     }
     return throwError(
       'Something bad happened; please try again later.');
