@@ -67,6 +67,21 @@ export class IndicadoresServices {
     );
   }
 
+
+  addMeta(meta: Meta): Observable<any> {
+    return this.http.post(apis.kpiApi + '/api/metas/add', meta).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  updateMeta(meta: Meta): Observable<any> {
+    return this.http.put(apis.kpiApi + '/api/metas/edit/' + meta.idCodigoIndiador, meta).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
   deleteMeta(meta: Meta): Observable<any> {
     debugger;
 

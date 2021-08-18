@@ -28,7 +28,8 @@ export class IndicadoresComponent implements OnInit {
   subObjetivoId: number = 0;
   subObjetivos: SubObjetivo[] = [];
   textoEditarRowGrid: any = variablesGenerales.textoEditarRowGrid;
-
+  indicadorId: number = 0;
+  agregarMetas: boolean = true;
   gridBoxValue: number[] = [3];
   isGridBoxOpened: boolean = false;
   gridColumns: any = [
@@ -113,15 +114,15 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
-  addMeta(indicador: Indicador): void {
-    indicador.idTiempo = this.tiempoId;
-    indicador.idSubobjetivos = this.subObjetivoId;
-    this.indicadoresServices.addIndicador(indicador).subscribe((resp: Indicador) => {
-      indicador.idCodigoIndiador = resp.idCodigoIndiador;
+  addMeta(meta: Meta): void {
+    meta.idAreaAgencia = this.gridBoxValue[0];
+    meta.idCodigoIndiador = this.indicadorId;
+    this.indicadoresServices.addMeta(meta).subscribe((resp: Meta) => {
+      meta.idAreaAgencia = resp.idCodigoIndiador;
     });
   }
-  updateMeta(indicador: Indicador): void {
-    this.indicadoresServices.updateIndicador(indicador).subscribe((resp: Indicador) => {
+  updateMeta(meta: Meta): void {
+    this.indicadoresServices.updateMeta(meta).subscribe((resp: Meta) => {
       console.log(resp);
     });
   }
@@ -149,6 +150,9 @@ export class IndicadoresComponent implements OnInit {
   selectionChanged(e: any): void {
     e.component.collapseAll(-1);
     e.component.expandRow(e.currentSelectedRowKeys[0]);
+    let currentIndicador = e.currentSelectedRowKeys[0] as Indicador;
+    this.indicadorId = currentIndicador.idCodigoIndiador;
+    currentIndicador.metaDto.length > 0 ? this.agregarMetas = false:this.agregarMetas = true;
   }
   gridBox_displayExpr(e: any) {
     return e && "Área: "+e.areaDto.nombreArea +" || Agencia: "+ e.agenciaDto.nombreAgencia;
@@ -159,6 +163,9 @@ export class IndicadoresComponent implements OnInit {
       this.isGridBoxOpened = false;
       this.ref.detectChanges();
     }
+  }
+  handleRowExpanding(event: Indicador): void {
+    this.indicadorId = event.idCodigoIndiador;
   }
 
 }

@@ -5,7 +5,7 @@
         </div>
         <div class="card-body">
             <dx-data-grid [dataSource]="indicadores" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateIndicador($event.data)" (onRowRemoved)="deleteIndicador($event.data.idCodigoIndiador)"
-                (onRowInserted)="addIndicador($event.data)" [masterDetail]="{enabled:true, template:'indicadorTemp'}" (onSelectionChanged)="selectionChanged($event)" (onContentReady)="contentReady($event)">
+                (onRowInserted)="addIndicador($event.data)" [masterDetail]="{enabled:true, template:'indicadorTemp'}" (onSelectionChanged)="selectionChanged($event)" (onContentReady)="contentReady($event)" (onRowExpanding)="handleRowExpanding($event.key)">
 
                 <dxo-selection mode="single"></dxo-selection>
                 <dxo-scrolling rowRenderingMode="virtual">
@@ -80,7 +80,7 @@
                         <dxo-header-filter [visible]="true"></dxo-header-filter>
                         <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
 
-                        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
+                        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="agregarMetas" [allowDeleting]="true" [texts]="textoEditarRowGrid">
                             <dxo-popup title="Metas" [showTitle]="true" width="60%" [height]="525">
                             </dxo-popup>
                             <dxo-form [colCount]="2">

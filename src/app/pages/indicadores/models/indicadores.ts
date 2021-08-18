@@ -14,5 +14,5 @@ export interface Indicador {
   responsables: string
   subObjetivoDto: SubObjetivo,
   tiempoDto: Tiempo
-  metaDto: Meta
+  metaDto: Meta[];
 }
