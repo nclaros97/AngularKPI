@@ -92,7 +92,6 @@ export class ObjetivosComponent implements OnInit {
 
     let objetivo: Objetivo | undefined = undefined;
     objetivo = this.objetivos.find(x => x.idObjetivo == this.objetivoId);
-    debugger;
     if (this.sumaPorcentajeSubObjetivos(this.objetivoId) >= objetivo!.porcentajeObjetivo) {
       alert("El porcentaje del sub objetivo excede el porcentaje del objetivo");
 

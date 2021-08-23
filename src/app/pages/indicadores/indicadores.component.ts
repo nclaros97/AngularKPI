@@ -9,6 +9,9 @@ import { AreaService } from '../areas/services/area.service';
 import { AreaAgencia } from '../agencias/models/areaAgencia';
 import CustomStore from 'devextreme/data/custom_store';
 import { Meta } from './models/meta';
+import { Estados } from './models/estado';
+import { IndicadorLogrado } from './models/indicadorLogrado';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-indicadores',
@@ -23,9 +26,6 @@ export class IndicadoresComponent implements OnInit {
   tiempos: any[] = [];
   areasAgencias: AreaAgencia[] = [];
   gridDataSource: any;
-  tiempoId: number = 0;
-  areaAgenciaId: number = 0;
-  subObjetivoId: number = 0;
   subObjetivos: SubObjetivo[] = [];
   textoEditarRowGrid: any = variablesGenerales.textoEditarRowGrid;
   indicadorId: number = 0;
@@ -47,12 +47,46 @@ export class IndicadoresComponent implements OnInit {
     }
   ];
 
+  estados: Estados[] = [];
+  logrados: IndicadorLogrado[] = [];
+  popupVisible: boolean = false;
+  emailButtonOptions: any;
+  closeButtonOptions: any;
+  positionOf: string = "";
+  meta: Meta = new Meta;
+
   ngOnInit(): void {
+    const that = this;
+    this.meta as Meta;
     this.getIndicadores();
     this.getTiempos();
     this.getSubObjetivos();
     this.getAreasAgencias();
     this.isGridBoxOpened = false;
+    this.estados = this.indicadoresServices.getEstados();
+    this.logrados = this.indicadoresServices.getLogrados();
+
+    this.emailButtonOptions = {
+      icon: "add",
+      text: "Agregar",
+      onClick: function (e: any) {
+        notify({
+          message: "Meta registrada",
+          position: {
+            my: "center top",
+            at: "center top"
+          }
+        }, "success", 3000);
+        console.log(e);
+      }
+    };
+    this.closeButtonOptions = {
+      text: "Close",
+      onClick: function (e: any) {
+        that.popupVisible = false;
+      }
+    };
+
   }
 
   getIndicadores(): void {
@@ -86,19 +120,17 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
-  makeDataSource(areasAgencias: any){
+  makeDataSource(areasAgencias: any) {
     return new CustomStore({
-        loadMode: "raw",
-        key: "idAreaAgencia",
-        load: function() {
-            return areasAgencias;
-        }
+      loadMode: "raw",
+      key: "idAreaAgencia",
+      load: function () {
+        return areasAgencias;
+      }
     });
-};
+  };
 
   addIndicador(indicador: Indicador): void {
-    indicador.idTiempo = this.tiempoId;
-    indicador.idSubobjetivos = this.subObjetivoId;
     this.indicadoresServices.addIndicador(indicador).subscribe((resp: Indicador) => {
       indicador.idCodigoIndiador = resp.idCodigoIndiador;
     });
@@ -108,10 +140,21 @@ export class IndicadoresComponent implements OnInit {
       console.log(resp);
     });
   }
+
+  editarIndicador: boolean = false;
+  onEditingStart(event: Indicador): void {
+    this.editarIndicador = true;
+  }
+
   deleteIndicador(indicadorId: number): void {
     this.indicadoresServices.deleteIndicador(indicadorId).subscribe((resp: Indicador) => {
       console.log(resp);
     });
+  }
+
+  showPopUp(data: any): void {
+    this.popupVisible = true;
+    this.meta.idCodigoIndiador = this.indicadorId;
   }
 
   addMeta(meta: Meta): void {
@@ -132,17 +175,6 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
-  handleValueChange(event: any): void {
-    this.tiempoId = event.value;
-  }
-  handleValueSubObjetivoChange(event: any): void {
-    this.subObjetivoId = event.value;
-  }
-
-  handleValueAreaAgenciaChange(event: any): void {
-    this.areaAgenciaId = event.value;
-  }
-
   contentReady(e: any): void {
     if (!e.component.getSelectedRowKeys().length)
       e.component.selectRowsByIndexes(0);
@@ -152,10 +184,9 @@ export class IndicadoresComponent implements OnInit {
     e.component.expandRow(e.currentSelectedRowKeys[0]);
     let currentIndicador = e.currentSelectedRowKeys[0] as Indicador;
     this.indicadorId = currentIndicador.idCodigoIndiador;
-    currentIndicador.metaDto.length > 0 ? this.agregarMetas = false:this.agregarMetas = true;
   }
   gridBox_displayExpr(e: any) {
-    return e && "Área: "+e.areaDto.nombreArea +" || Agencia: "+ e.agenciaDto.nombreAgencia;
+    return e && "Área: " + e.areaDto.nombreArea + " || Agencia: " + e.agenciaDto.nombreAgencia;
   }
 
   onGridBoxOptionChanged(e: any) {

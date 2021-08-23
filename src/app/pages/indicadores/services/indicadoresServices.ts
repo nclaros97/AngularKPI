@@ -6,14 +6,38 @@ import { map } from 'rxjs/operators';
 import { apis } from 'src/environments/environment';
 import { Indicador } from '../models/indicadores';
 import { Meta } from '../models/meta';
+import { Estados } from '../models/estado';
+import { IndicadorLogrado } from '../models/indicadorLogrado';
 
 const endpoint = apis.kpiApi + "/api/indicadores/";
 const endpointTiempos = apis.kpiApi + "/api/tiempos/";
 const endpointSubObjetivos = apis.kpiApi + "/api/subObjetivos/";
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class IndicadoresServices {
+  estados: Estados[] = [{
+    estado: 1,
+    nombreEstado: "Activo",
+
+  },
+  {
+    estado: 2,
+    nombreEstado: "Inactivo"
+  }
+  ];
+  logrados: IndicadorLogrado[] = [
+    {
+      id: 1,
+      logrado: "Sí"
+    },
+    {
+      id: 2,
+      logrado: "No"
+    }
+  ]
 
   constructor(private http: HttpClient) { }
 
@@ -36,6 +60,14 @@ export class IndicadoresServices {
       map(this.extractData),
       catchError(this.handleError)
     );
+  }
+
+  getEstados(): Estados[] {
+    return this.estados;
+  }
+
+  getLogrados(): IndicadorLogrado[]{
+    return this.logrados;
   }
 
   getAreasAgencias(): Observable<any> {
@@ -107,7 +139,7 @@ export class IndicadoresServices {
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
-        console.log(error);
+      console.log(error);
     }
     return throwError(
       'Something bad happened; please try again later.');

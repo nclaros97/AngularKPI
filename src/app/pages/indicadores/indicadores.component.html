@@ -5,7 +5,8 @@
         </div>
         <div class="card-body">
             <dx-data-grid [dataSource]="indicadores" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateIndicador($event.data)" (onRowRemoved)="deleteIndicador($event.data.idCodigoIndiador)"
-                (onRowInserted)="addIndicador($event.data)" [masterDetail]="{enabled:true, template:'indicadorTemp'}" (onSelectionChanged)="selectionChanged($event)" (onContentReady)="contentReady($event)" (onRowExpanding)="handleRowExpanding($event.key)">
+                (onRowInserted)="addIndicador($event.data)" [masterDetail]="{enabled:true, template:'indicadorTemp'}" (onSelectionChanged)="selectionChanged($event)" (onContentReady)="contentReady($event)" (onRowExpanding)="handleRowExpanding($event.key)"
+                (onEditingStart)="onEditingStart($event.data)">
 
                 <dxo-selection mode="single"></dxo-selection>
                 <dxo-scrolling rowRenderingMode="virtual">
@@ -18,105 +19,92 @@
                 <dxo-header-filter [visible]="true"></dxo-header-filter>
 
                 <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
-                    <dxo-popup title="Indicador" [showTitle]="true" [width]="700" [height]="525">
+                    <dxo-popup title="Indicador" [showTitle]="true" width="70%" height="90%">
                     </dxo-popup>
-                    <dxo-form>
-                        <dxi-item dataField="nombreIndicador"></dxi-item>
-                        <dxi-item dataField="proceso" caption="Proceso" alignment="center">
-                        </dxi-item>
-                        <dxi-item dataField="formula" caption="Formula" alignment="center">
-                        </dxi-item>
-                        <dxi-item dataField="detalle" caption="Detalle" alignment="center">
-                        </dxi-item>
-                        <dxi-item dataField="estado" caption="Estado" alignment="center">
-                        </dxi-item>
-                        <dxi-item dataField="responsables" caption="Responsable" alignment="center">
-                        </dxi-item>
-                        <dxi-item template="tiempoSelectBox">
-                            <dxo-label text="Tiempo"></dxo-label>
-                        </dxi-item>
-                        <div *dxTemplate="let selectBoxItem of 'tiempoSelectBox'">
-                            <dx-select-box [(value)]="tiempoId" [dataSource]="tiempos" [deferRendering]="false" valueExpr="idTiempo" displayExpr="nombrePeriodo" (onValueChanged)="handleValueChange($event)">
-                            </dx-select-box>
-                        </div>
-                        <dxi-item template="subObjetivoSelectBox">
-                            <dxo-label text="Sub Objetivo"></dxo-label>
-                        </dxi-item>
-                        <div *dxTemplate="let selectBoxItem of 'subObjetivoSelectBox'">
-                            <dx-select-box [(value)]="subObjetivoId" [dataSource]="subObjetivos" [deferRendering]="false" valueExpr="idSubobjetivos" displayExpr="nombreSubobjetivo" (onValueChanged)="handleValueSubObjetivoChange($event)">
-                            </dx-select-box>
-                        </div>
-                    </dxo-form>
                 </dxo-editing>
 
                 <dxi-column dataField="idCodigoIndiador" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
                 </dxi-column>
                 <dxi-column dataField="nombreIndicador" caption="Indicador" alignment="center">
                 </dxi-column>
-                <dxi-column dataField="estado" caption="Estado" alignment="center">
-                </dxi-column>
+
                 <dxi-column dataField="responsables" caption="Responsable" alignment="center">
                 </dxi-column>
 
+                <dxi-column dataField="proceso" caption="Proceso" alignment="center" [visible]="false">
+                </dxi-column>
+                <dxi-column dataField="formula" caption="Formula" alignment="center" [visible]="false">
+                </dxi-column>
+                <dxi-column dataField="detalle" caption="Detalle" alignment="center" [visible]="false">
+                </dxi-column>
+
+                <dxi-column dataField="idTiempo" caption="Tiempo" [width]="125" [visible]="true">
+                    <dxo-lookup [dataSource]="tiempos" displayExpr="nombrePeriodo" valueExpr="idTiempo">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="idSubobjetivos" caption="Sub Objetivo" [width]="130" [visible]="true">
+                    <dxo-lookup [dataSource]="subObjetivos" displayExpr="nombreSubobjetivo" valueExpr="idSubobjetivos">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="estado" caption="Estado" [width]="130" [visible]="true">
+                    <dxo-lookup [dataSource]="estados" displayExpr="nombreEstado" valueExpr="nombreEstado">
+                    </dxo-lookup>
+                </dxi-column>
+
                 <div *dxTemplate="let indicadorData of 'indicadorTemp'">
-                    <dx-form id="formContainer" [formData]="indicadorData.data" [colCount]="2" [readOnly]=true [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
-                        <dxi-item dataField="proceso" editorType="dxTextArea"></dxi-item>
-                        <dxi-item dataField="formula" editorType="dxTextArea"></dxi-item>
-                        <dxi-item dataField="tiempoDto.nombrePeriodo" caption="Periodo"></dxi-item>
-                        <dxi-item dataField="subObjetivoDto.nombreSubobjetivo" caption="Sub Objetivo"></dxi-item>
-                        <dxi-item dataField="detalle" [colSpan]=2 editorType="dxTextArea"></dxi-item>
-                    </dx-form>
 
-                    <dx-data-grid [dataSource]="indicadorData.data.metaDto" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateMeta($event.data)" (onRowRemoved)="deleteMeta($event.data)"
-                        (onRowInserted)="addMeta($event.data)">
+                    <dx-tab-panel>
+                        <dxi-item title="Indicador" template="indicadorTemplate"></dxi-item>
+                        <div *dxTemplate="let indicadorItem of 'indicadorTemplate'">
+                            <dx-form id="formContainer" [formData]="indicadorData.data" [colCount]="2" [readOnly]=true [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
+                                <dxi-item dataField="proceso" editorType="dxTextArea"></dxi-item>
+                                <dxi-item dataField="formula" editorType="dxTextArea"></dxi-item>
+                                <dxi-item dataField="detalle" [colSpan]=2 editorType="dxTextArea"></dxi-item>
+                            </dx-form>
+                        </div>
 
-                        <dxo-scrolling rowRenderingMode="virtual">
-                        </dxo-scrolling>
-                        <dxo-paging [pageSize]="5">
-                        </dxo-paging>
-                        <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true" [showInfo]="true" [showNavigationButtons]="true">
-                        </dxo-pager>
-                        <dxo-filter-row [visible]="true"></dxo-filter-row>
-                        <dxo-header-filter [visible]="true"></dxo-header-filter>
-                        <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-
-                        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="agregarMetas" [allowDeleting]="true" [texts]="textoEditarRowGrid">
-                            <dxo-popup title="Metas" [showTitle]="true" width="60%" [height]="525">
-                            </dxo-popup>
-                            <dxo-form [colCount]="2">
-
-                                <dxi-item template="areaAgenciaSelectBox" width="100%" [colSpan]="2">
-                                    <dxo-label text="Meta"></dxo-label>
+                        <dxi-item title="Sub Objetivo" template="subObjetivoTemplate"></dxi-item>
+                        <div *dxTemplate="let subObjetivoItem of 'subObjetivoTemplate'">
+                            <dx-form id="formContainer" [formData]="indicadorData.data.subObjetivoDto" [colCount]="2" [readOnly]=true [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
+                                <dxi-item dataField="nombreSubobjetivo"></dxi-item>
+                                <dxi-item dataField="subObjetivo">
+                                    <dxo-label text="% Sub Objetivo"></dxo-label>
                                 </dxi-item>
-                                <div *dxTemplate="let selectBoxItem of 'areaAgenciaSelectBox'">
-                                    <dx-drop-down-box [(value)]="gridBoxValue" [(opened)]="isGridBoxOpened" valueExpr="idAreaAgencia" [deferRendering]="false" [displayExpr]="gridBox_displayExpr" placeholder="Seleccione..." [showClearButton]="true" [dataSource]="gridDataSource" (onOptionChanged)="onGridBoxOptionChanged($event)">
+                                <dxi-item dataField="areaDto.nombreArea">
+                                    <dxo-label text="Área"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="objetivosDto.nombreObjetivo">
+                                    <dxo-label text="Objetivo"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="objetivosDto.porcentajeObjetivo">
+                                    <dxo-label text="% Objetivo"></dxo-label>
+                                </dxi-item>
+                            </dx-form>
+                        </div>
 
-                                        <div *dxTemplate="let data of 'content'">
-                                            <dx-data-grid [dataSource]="gridDataSource" [columns]="gridColumns" [hoverStateEnabled]="true" [(selectedRowKeys)]="gridBoxValue" height="100%">
-                                                <dxo-selection mode="single"></dxo-selection>
-                                                <dxo-filter-row [visible]="true"></dxo-filter-row>
-                                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
-                                            </dx-data-grid>
-                                        </div>
-                                    </dx-drop-down-box>
+                        <dxi-item title="Meta" template="metaTemplate"></dxi-item>
+                        <div *dxTemplate="let metaItem of 'metaTemplate'">
+                            <dx-button *ngIf="indicadorData.data.metaDto == undefined" text="Agregar Meta" type="success" style="margin-top:20px ;" (onClick)="showPopUp($event)">
+                            </dx-button>
+                            <dx-button *ngIf="indicadorData.data.metaDto != undefined" text="Eliminar Meta" type="danger" style="margin-left:10px ;margin-top:20px ;">
+                            </dx-button>
+                            <div *ngIf="indicadorData.data.metaDto != undefined ">
+                                <dx-form id="formContainer" [formData]="indicadorData.data.metaDto" [colCount]="2" [readOnly]=true [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
+                                    <dxi-item dataField="areaAgenciaDto.areaDto.nombreArea">
+                                        <dxo-label text="Área"></dxo-label>
+                                    </dxi-item>
+                                    <dxi-item dataField="areaAgenciaDto.agenciaDto.nombreAgencia">
+                                        <dxo-label text="Agencia"></dxo-label>
+                                    </dxi-item>
+                                </dx-form>
+                            </div>
+                            <div *ngIf="indicadorData.data.metaDto == undefined" style="margin-top: 20px;">
+                                <div class="alert alert-primary" role="alert">
+                                    No se ha encontrado meta registrada
                                 </div>
-                            </dxo-form>
-                        </dxo-editing>
-
-                        <dxi-column dataField="idAreaAgencia" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
-                        </dxi-column>
-                        <dxi-column dataField="areaAgenciaDto.areaDto.nombreArea" caption="Área" alignment="center" [width]="300">
-                        </dxi-column>
-                        <dxi-column dataField="areaAgenciaDto.agenciaDto.nombreAgencia" caption="Agencia" alignment="center">
-                        </dxi-column>
-                        <dxi-column dataField="logradoDto.logrado1" caption="Meta Cumplida" alignment="center">
-                        </dxi-column>
-                        <dxi-column dataField="logradoDto.porcentajeCumplimiento" caption="Porcentaje Cumplimiento" alignment="center">
-                        </dxi-column>
-                        <dxi-column dataField="logradoDto.observacion" caption="Observacion" alignment="center">
-                        </dxi-column>
-                    </dx-data-grid>
+                            </div>
+                        </div>
+                    </dx-tab-panel>
 
                 </div>
 
@@ -125,3 +113,32 @@
     </div>
 
 </div>
+<dx-popup width="70%" height="70%" [showTitle]="true" title="Meta" [dragEnabled]="false" [closeOnOutsideClick]="true" [showCloseButton]="false" [(visible)]="popupVisible">
+    <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="before" [options]="emailButtonOptions">
+    </dxi-toolbar-item>
+    <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [options]="closeButtonOptions">
+    </dxi-toolbar-item>
+
+    <dxo-form [formData]="meta">
+        <dxi-item dataField="idCodigoIndiador">
+            <dxo-label text="Indicador"></dxo-label>
+        </dxi-item>
+        <dxi-item template="areaAgenciaSelectBox" width="100%" dataField="idAreaAgencia">
+            <dxo-label text="Meta"></dxo-label>
+        </dxi-item>
+        <div *dxTemplate="let selectBoxItem of 'areaAgenciaSelectBox'">
+            <dx-drop-down-box [(value)]="gridBoxValue" [(opened)]="isGridBoxOpened" valueExpr="idAreaAgencia" [deferRendering]="false" [displayExpr]="gridBox_displayExpr" placeholder="Seleccione..." [showClearButton]="true" [dataSource]="gridDataSource" (onOptionChanged)="onGridBoxOptionChanged($event)">
+
+                <div *dxTemplate="let data of 'content'">
+                    <dx-data-grid [dataSource]="gridDataSource" [columns]="gridColumns" [hoverStateEnabled]="true" [(selectedRowKeys)]="gridBoxValue" height="100%">
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+                        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                    </dx-data-grid>
+                </div>
+            </dx-drop-down-box>
+        </div>
+    </dxo-form>
+
+</dx-popup>
