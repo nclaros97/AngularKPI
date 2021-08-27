@@ -12,6 +12,7 @@ import { Meta } from './models/meta';
 import { Estados } from './models/estado';
 import { IndicadorLogrado } from './models/indicadorLogrado';
 import notify from 'devextreme/ui/notify';
+import { Logrado } from './models/logrado';
 
 @Component({
   selector: 'app-indicadores',
@@ -77,7 +78,7 @@ export class IndicadoresComponent implements OnInit {
             at: "center top"
           }
         }, "success", 3000);
-        console.log(e);
+        that.addMeta();
       }
     };
     this.closeButtonOptions = {
@@ -157,12 +158,27 @@ export class IndicadoresComponent implements OnInit {
     this.meta.idCodigoIndiador = this.indicadorId;
   }
 
-  addMeta(meta: Meta): void {
+  addMeta(): void {
+    let meta = new Meta;
     meta.idAreaAgencia = this.gridBoxValue[0];
     meta.idCodigoIndiador = this.indicadorId;
     this.indicadoresServices.addMeta(meta).subscribe((resp: Meta) => {
       meta.idAreaAgencia = resp.idCodigoIndiador;
     });
+
+    let logrado = new Logrado;
+    logrado.idAreaAgencia = meta.idAreaAgencia;
+    logrado.idCodigoIndiador = meta.idCodigoIndiador;
+    logrado.logrado1 = "No";
+    logrado.meta = "";
+    logrado.observacion = "Meta Iniciada";
+    logrado.porcentajeCumplimiento = "0";
+
+    this.indicadoresServices.addMetaLogrado(logrado).subscribe((resp: Logrado)=>{
+
+    });
+
+    this.popupVisible = false;
   }
   updateMeta(meta: Meta): void {
     this.indicadoresServices.updateMeta(meta).subscribe((resp: Meta) => {

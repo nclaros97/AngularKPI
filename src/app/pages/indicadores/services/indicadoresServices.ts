@@ -8,6 +8,7 @@ import { Indicador } from '../models/indicadores';
 import { Meta } from '../models/meta';
 import { Estados } from '../models/estado';
 import { IndicadorLogrado } from '../models/indicadorLogrado';
+import { Logrado } from '../models/logrado';
 
 const endpoint = apis.kpiApi + "/api/indicadores/";
 const endpointTiempos = apis.kpiApi + "/api/tiempos/";
@@ -122,6 +123,13 @@ export class IndicadoresServices {
         'Content-Type': 'application/json',
       }), body: meta
     }).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  addMetaLogrado(logrado: Logrado): Observable<any> {
+    return this.http.post(apis.kpiApi + '/api/logrados/add', logrado).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );

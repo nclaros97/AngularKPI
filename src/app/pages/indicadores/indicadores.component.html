@@ -86,7 +86,7 @@
                         <div *dxTemplate="let metaItem of 'metaTemplate'">
                             <dx-button *ngIf="indicadorData.data.metaDto == undefined" text="Agregar Meta" type="success" style="margin-top:20px ;" (onClick)="showPopUp($event)">
                             </dx-button>
-                            <dx-button *ngIf="indicadorData.data.metaDto != undefined" text="Eliminar Meta" type="danger" style="margin-left:10px ;margin-top:20px ;">
+                            <dx-button *ngIf="indicadorData.data.metaDto != undefined" text="Eliminar Meta" type="danger" style="margin-left:10px ;margin-top:20px ;" (onClick)="deleteMeta(indicadorData.data.metaDto)">
                             </dx-button>
                             <div *ngIf="indicadorData.data.metaDto != undefined ">
                                 <dx-form id="formContainer" [formData]="indicadorData.data.metaDto" [colCount]="2" [readOnly]=true [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
@@ -119,26 +119,16 @@
     <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [options]="closeButtonOptions">
     </dxi-toolbar-item>
 
-    <dxo-form [formData]="meta">
-        <dxi-item dataField="idCodigoIndiador">
-            <dxo-label text="Indicador"></dxo-label>
-        </dxi-item>
-        <dxi-item template="areaAgenciaSelectBox" width="100%" dataField="idAreaAgencia">
-            <dxo-label text="Meta"></dxo-label>
-        </dxi-item>
-        <div *dxTemplate="let selectBoxItem of 'areaAgenciaSelectBox'">
-            <dx-drop-down-box [(value)]="gridBoxValue" [(opened)]="isGridBoxOpened" valueExpr="idAreaAgencia" [deferRendering]="false" [displayExpr]="gridBox_displayExpr" placeholder="Seleccione..." [showClearButton]="true" [dataSource]="gridDataSource" (onOptionChanged)="onGridBoxOptionChanged($event)">
+    <dx-drop-down-box [(value)]="gridBoxValue" [(opened)]="isGridBoxOpened" valueExpr="idAreaAgencia" [deferRendering]="false" [displayExpr]="gridBox_displayExpr" placeholder="Seleccione..." [showClearButton]="true" [dataSource]="gridDataSource" (onOptionChanged)="onGridBoxOptionChanged($event)">
 
-                <div *dxTemplate="let data of 'content'">
-                    <dx-data-grid [dataSource]="gridDataSource" [columns]="gridColumns" [hoverStateEnabled]="true" [(selectedRowKeys)]="gridBoxValue" height="100%">
-                        <dxo-selection mode="single"></dxo-selection>
-                        <dxo-filter-row [visible]="true"></dxo-filter-row>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
-                    </dx-data-grid>
-                </div>
-            </dx-drop-down-box>
+        <div *dxTemplate="let data of 'content'">
+            <dx-data-grid [dataSource]="gridDataSource" [columns]="gridColumns" [hoverStateEnabled]="true" [(selectedRowKeys)]="gridBoxValue" height="100%">
+                <dxo-selection mode="single"></dxo-selection>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+            </dx-data-grid>
         </div>
-    </dxo-form>
+    </dx-drop-down-box>
 
 </dx-popup>
