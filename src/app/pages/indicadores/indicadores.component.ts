@@ -13,6 +13,8 @@ import { Estados } from './models/estado';
 import { IndicadorLogrado } from './models/indicadorLogrado';
 import notify from 'devextreme/ui/notify';
 import { Logrado } from './models/logrado';
+import DataSource from 'devextreme/data/data_source';
+import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
   selector: 'app-indicadores',
@@ -51,10 +53,15 @@ export class IndicadoresComponent implements OnInit {
   estados: Estados[] = [];
   logrados: IndicadorLogrado[] = [];
   popupVisible: boolean = false;
+  popupVisibleEditLogrado:boolean = false;
   emailButtonOptions: any;
   closeButtonOptions: any;
+  updateLogradoButtonOptions: any;
+  updateLogradoCloseButtonOptions: any;
   positionOf: string = "";
   meta: Meta = new Meta;
+  logradoEditado: Logrado = new Logrado;
+  dataSource: any;
 
   ngOnInit(): void {
     const that = this;
@@ -82,11 +89,39 @@ export class IndicadoresComponent implements OnInit {
       }
     };
     this.closeButtonOptions = {
-      text: "Close",
+      text: "Cerrar",
       onClick: function (e: any) {
         that.popupVisible = false;
       }
     };
+
+    this.updateLogradoButtonOptions = {
+      icon: "edit",
+      text: "Guardar",
+      onClick: function (e: any) {
+        notify({
+          message: "Meta Actualizada",
+          position: {
+            my: "center top",
+            at: "center top"
+          }
+        }, "success", 3000);
+        that.updateMetaLogrado();
+      }
+    };
+    this.updateLogradoCloseButtonOptions = {
+      text: "Cerrar",
+      onClick: function (e: any) {
+        that.popupVisibleEditLogrado = false;
+      }
+    };
+
+    this.dataSource = new DataSource({
+      store: new ArrayStore({
+          data: this.logrados,
+          key: "id",
+      })
+  });
 
   }
 
@@ -157,6 +192,15 @@ export class IndicadoresComponent implements OnInit {
     this.popupVisible = true;
     this.meta.idCodigoIndiador = this.indicadorId;
   }
+  valueLogrado: any = [];
+  porcentajeCumplimiento:number = 0;
+  showPopUpEditLogrado(data: any,logrado: Logrado): void {
+    this.popupVisibleEditLogrado = true;
+    this.meta.idCodigoIndiador = this.indicadorId;
+    this.logradoEditado = logrado;
+    this.valueLogrado = this.logrados.find(x=>x.logrado == logrado.logrado1);
+    this.porcentajeCumplimiento = Number(this.logradoEditado.porcentajeCumplimiento)/100
+  }
 
   addMeta(): void {
     let meta = new Meta;
@@ -191,6 +235,13 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
+  updateMetaLogrado(): void {
+    this.indicadoresServices.updateMetaLogrado(this.logradoEditado).subscribe((resp: Indicador) => {
+      console.log(resp);
+    });
+    this.popupVisibleEditLogrado = false;
+  }
+
   contentReady(e: any): void {
     if (!e.component.getSelectedRowKeys().length)
       e.component.selectRowsByIndexes(0);
@@ -213,6 +264,14 @@ export class IndicadoresComponent implements OnInit {
   }
   handleRowExpanding(event: Indicador): void {
     this.indicadorId = event.idCodigoIndiador;
+  }
+
+  porcentajeCumplimientoChange(data: any): void{
+    this.logradoEditado.porcentajeCumplimiento = String(data.value*100);
+  }
+
+  logradoChange(data: any): void{
+    this.logradoEditado.logrado1 = this.logrados.find(x=>x.id == data.value)!.logrado
   }
 
 }

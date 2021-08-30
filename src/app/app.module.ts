@@ -25,7 +25,8 @@ import {
   DxDropDownBoxModule,
   DxTabPanelModule,
   DxButtonModule,
-  DxPopupModule
+  DxPopupModule,
+  DxTextBoxModule
 } from 'devextreme-angular';
 import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 import { TiemposComponent } from './pages/tiempos/tiempos.component';
@@ -64,7 +65,9 @@ import { TiemposComponent } from './pages/tiempos/tiempos.component';
     DxDropDownBoxModule,
     DxTabPanelModule,
     DxButtonModule,
-    DxPopupModule
+    DxPopupModule,
+    DxTextBoxModule,
+    DxNumberBoxModule
   ],
   providers: [AuthService, ScreenService, AppInfoService, AgenciaService],
   bootstrap: [AppComponent]

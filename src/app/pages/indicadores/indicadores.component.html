@@ -97,12 +97,33 @@
                                         <dxo-label text="Agencia"></dxo-label>
                                     </dxi-item>
                                 </dx-form>
+
+                                <div class="card" style="width: 80%;margin:auto;margin-top: 15px;">
+                                    <h5 class="card-header alert alert-primary">Detalle Meta</h5>
+                                    <div class="card-body">
+                                        <dx-form id="formContainer" [formData]="indicadorData.data.metaDto.logradoDto" [colCount]="2" [readOnly]=true [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
+                                            <dxi-item dataField="logrado1">
+                                                <dxo-label text="Logrado"></dxo-label>
+                                            </dxi-item>
+                                            <dxi-item dataField="porcentajeCumplimiento">
+                                                <dxo-label text="% Cumplimineto"></dxo-label>
+                                            </dxi-item>
+                                            <dxi-item dataField="observacion">
+                                                <dxo-label text="Observación"></dxo-label>
+                                            </dxi-item>
+                                        </dx-form>
+                                        <dx-button text="Modificar" type="success" (onClick)="showPopUpEditLogrado($event,indicadorData.data.metaDto.logradoDto)">
+                                        </dx-button>
+                                    </div>
+                                </div>
+
                             </div>
                             <div *ngIf="indicadorData.data.metaDto == undefined" style="margin-top: 20px;">
                                 <div class="alert alert-primary" role="alert">
                                     No se ha encontrado meta registrada
                                 </div>
                             </div>
+
                         </div>
                     </dx-tab-panel>
 
@@ -130,5 +151,36 @@
             </dx-data-grid>
         </div>
     </dx-drop-down-box>
+
+</dx-popup>
+
+<dx-popup width="70%" height="70%" [showTitle]="true" title="Meta" [dragEnabled]="false" [closeOnOutsideClick]="true" [showCloseButton]="false" [(visible)]="popupVisibleEditLogrado">
+    <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="before" [options]="updateLogradoButtonOptions">
+    </dxi-toolbar-item>
+    <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [options]="updateLogradoCloseButtonOptions">
+    </dxi-toolbar-item>
+
+    <div class="dx-fieldset">
+
+        <div class="dx-field">
+            <div class="dx-field-label">Logrado:</div>
+            <dx-lookup width="100%" [dataSource]="dataSource" displayExpr="logrado" valueExpr="id" (onValueChanged)="logradoChange($event)" [(value)]="valueLogrado">
+                <dxo-drop-down-options [closeOnOutsideClick]="true" [showTitle]="false">
+                </dxo-drop-down-options>
+            </dx-lookup>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">% Cumplimiento</div>
+            <div class="dx-field-value">
+                <dx-number-box width="100%" format="#0%" (onValueChanged)="porcentajeCumplimientoChange($event)" [(value)]="porcentajeCumplimiento"></dx-number-box>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Observación</div>
+            <dx-text-area width="100%" [height]="90" [(value)]="logradoEditado.observacion">
+            </dx-text-area>
+        </div>
+    </div>
 
 </dx-popup>

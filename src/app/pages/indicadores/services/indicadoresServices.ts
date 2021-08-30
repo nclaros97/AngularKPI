@@ -135,6 +135,13 @@ export class IndicadoresServices {
     );
   }
 
+  updateMetaLogrado(logrado: Logrado): Observable<any> {
+    return this.http.put(apis.kpiApi + '/api/logrados/edit/' + logrado.idCodigoIndiador, logrado).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
   private extractData(res: any): any {
     const body = res;
     return body || {};
