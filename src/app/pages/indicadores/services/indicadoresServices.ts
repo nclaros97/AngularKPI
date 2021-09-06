@@ -27,6 +27,14 @@ export class IndicadoresServices {
   {
     estado: 2,
     nombreEstado: "Inactivo"
+  },
+  {
+    estado: 3,
+    nombreEstado: "Evaluado"
+  },
+  {
+    estado: 4,
+    nombreEstado: "Sin Evaluar"
   }
   ];
   logrados: IndicadorLogrado[] = [
@@ -67,7 +75,7 @@ export class IndicadoresServices {
     return this.estados;
   }
 
-  getLogrados(): IndicadorLogrado[]{
+  getLogrados(): IndicadorLogrado[] {
     return this.logrados;
   }
 
@@ -137,6 +145,17 @@ export class IndicadoresServices {
 
   updateMetaLogrado(logrado: Logrado): Observable<any> {
     return this.http.put(apis.kpiApi + '/api/logrados/edit/' + logrado.idCodigoIndiador, logrado).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteMetaLogrado(logrado: Logrado): Observable<any> {
+    return this.http.request('DELETE', apis.kpiApi + '/api/logrados/delete/', {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }), body: logrado
+    }).pipe(
       map(this.extractData),
       catchError(this.handleError)
     );

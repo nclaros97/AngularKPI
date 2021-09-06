@@ -1,7 +1,7 @@
 import { Area } from "../../areas/models/area";
 
-export interface Agencia{
-  idAgencia: number,
-  nombreAgencia: string,
-  areas: Area[]
+export class Agencia{
+  idAgencia: number=0;
+  nombreAgencia: string="";
+  areas: Area[]=[];
 }

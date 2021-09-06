@@ -1,47 +1,77 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { Area } from 'src/app/pages/areas/models/area';
+import { Usuario } from '../components/user-panel/models/user';
+import { Agencia } from '../../pages/agencias/models/agencia';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { apis } from 'src/environments/environment';
+import { catchError, map } from 'rxjs/operators';
 
 export interface IUser {
   email: string;
-  avatarUrl?: string
+  avatarUrl?: string,
+  idArea?: number,
+  idAreaNavigation?: Area,
+  usuarioTipo?: string,
+  idAgencia?: number
+  idAgenciaNavigation?: Agencia
 }
 
 const defaultPath = '/';
-const defaultUser = {
-  email: 'demo@example.com',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
-};
-
+const defaultUser = new Usuario;
+const endpoint = apis.kpiApi;
 @Injectable()
 export class AuthService {
   private _user: IUser | null = defaultUser;
   get loggedIn(): boolean {
     return !!this._user;
   }
+  data =
+    {
+      isSuccess: false,
+      message: "Invalid Username And Password",
+      data: {}
+  };
 
   private _lastAuthenticatedPath: string = defaultPath;
   set lastAuthenticatedPath(value: string) {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
   async logIn(email: string, password: string) {
-
     try {
       // Send request
       console.log(email, password);
-      this._user = { ...defaultUser, email };
-      this.router.navigate([this._lastAuthenticatedPath]);
 
-      return {
-        isOk: true,
-        data: this._user
-      };
+      const promise = new Promise((resolve, reject) => {
+        const apiURL = endpoint + '/api/usuarios/login/';
+        this.http
+          .post<Usuario>(apiURL, {email,password})
+          .toPromise()
+          .then((res: any) => {
+            // Success
+            this.data.data = res.data;
+
+            this._user = res;
+            this.router.navigate([this._lastAuthenticatedPath]);
+            this.data.isSuccess = res.data.isSuccess;
+            resolve(this.data);
+          },
+            err => {
+              // Error
+              this.data.isSuccess = false;
+              reject(err);
+            }
+          );
+      });
+      return this.data;
     }
     catch {
       return {
-        isOk: false,
+        isSuccess: false,
         message: "Authentication failed"
       };
     }

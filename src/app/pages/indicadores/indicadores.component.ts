@@ -213,10 +213,10 @@ export class IndicadoresComponent implements OnInit {
     let logrado = new Logrado;
     logrado.idAreaAgencia = meta.idAreaAgencia;
     logrado.idCodigoIndiador = meta.idCodigoIndiador;
-    logrado.logrado1 = "No";
-    logrado.meta = "";
+    logrado.logrado1 = "0";
+    logrado.meta = "0";
     logrado.observacion = "Meta Iniciada";
-    logrado.porcentajeCumplimiento = "0";
+    logrado.porcentajeCumplimiento =String((Number(logrado.meta)/Number(logrado.logrado1))*100);
 
     this.indicadoresServices.addMetaLogrado(logrado).subscribe((resp: Logrado)=>{
 
@@ -233,6 +233,19 @@ export class IndicadoresComponent implements OnInit {
     this.indicadoresServices.deleteMeta(meta).subscribe((resp: Meta) => {
       console.log(resp);
     });
+    let logrado = new Logrado;
+    logrado.idAreaAgencia = meta.idAreaAgencia;
+    logrado.idCodigoIndiador = this.indicadorId;
+    this.indicadoresServices.deleteMetaLogrado(logrado).subscribe((resp: Meta) => {
+      console.log(resp);
+    });
+    notify({
+      message: "Meta eliminada",
+      position: {
+        my: "center top",
+        at: "center top"
+      }
+    }, "success", 3000);
   }
 
   updateMetaLogrado(): void {
