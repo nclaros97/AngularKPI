@@ -3,10 +3,12 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Area } from 'src/app/pages/areas/models/area';
 import { Usuario } from '../components/user-panel/models/user';
 import { Agencia } from '../../pages/agencias/models/agencia';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { apis } from 'src/environments/environment';
-import { catchError, map } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import * as moment from 'moment';
+
+const jwt = new JwtHelperService();
 
 export interface IUser {
   email: string;
@@ -24,6 +26,7 @@ const endpoint = apis.kpiApi;
 @Injectable()
 export class AuthService {
   private _user: IUser | null = defaultUser;
+  private decodedToken: any;
   get loggedIn(): boolean {
     return !!this._user;
   }
@@ -46,7 +49,7 @@ export class AuthService {
       // Send request
       console.log(email, password);
 
-      const promise = new Promise((resolve, reject) => {
+      const promise = await new Promise((resolve, reject) => {
         const apiURL = endpoint + '/api/usuarios/login/';
         this.http
           .post<Usuario>(apiURL, {email,password})
@@ -54,11 +57,13 @@ export class AuthService {
           .then((res: any) => {
             // Success
             this.data.data = res.data;
-
-            this._user = res;
             this.router.navigate([this._lastAuthenticatedPath]);
-            this.data.isSuccess = res.data.isSuccess;
+            this.data.isSuccess = res.isSuccess;
+            if(res.isSuccess){
+              this.saveToken(res.data.token);
+            }
             resolve(this.data);
+
           },
             err => {
               // Error
@@ -75,6 +80,14 @@ export class AuthService {
         message: "Authentication failed"
       };
     }
+  }
+
+  private saveToken(token: any): any {
+    this.decodedToken = jwt.decodeToken(token);
+    this._user = this.decodedToken;
+    localStorage.setItem('auth_tkn', token);
+    localStorage.setItem('auth_meta', JSON.stringify(this.decodedToken));
+    return token;
   }
 
   async getUser() {
@@ -148,6 +161,8 @@ export class AuthService {
 
   async logOut() {
     this._user = null;
+    localStorage.removeItem('auth_tkn');
+    localStorage.removeItem('auth_meta');
     this.router.navigate(['/login-form']);
   }
 }
