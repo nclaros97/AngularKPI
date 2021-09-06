@@ -53,7 +53,7 @@ export class IndicadoresComponent implements OnInit {
   estados: Estados[] = [];
   logrados: IndicadorLogrado[] = [];
   popupVisible: boolean = false;
-  popupVisibleEditLogrado:boolean = false;
+  popupVisibleEditLogrado: boolean = false;
   emailButtonOptions: any;
   closeButtonOptions: any;
   updateLogradoButtonOptions: any;
@@ -118,10 +118,10 @@ export class IndicadoresComponent implements OnInit {
 
     this.dataSource = new DataSource({
       store: new ArrayStore({
-          data: this.logrados,
-          key: "id",
+        data: this.logrados,
+        key: "id",
       })
-  });
+    });
 
   }
 
@@ -192,16 +192,16 @@ export class IndicadoresComponent implements OnInit {
     this.popupVisible = true;
     this.meta.idCodigoIndiador = this.indicadorId;
   }
-  porcentajeCumplimiento:number = 0;
-  porcentajeLogrado:number = 0;
-  porcentajeMeta:number = 0;
-  showPopUpEditLogrado(data: any,logrado: Logrado): void {
+  porcentajeCumplimiento: number = 0;
+  porcentajeLogrado: number = 0;
+  porcentajeMeta: number = 0;
+  showPopUpEditLogrado(data: any, logrado: Logrado): void {
     this.popupVisibleEditLogrado = true;
     this.meta.idCodigoIndiador = this.indicadorId;
     this.logradoEditado = logrado;
-    this.porcentajeCumplimiento = Number(this.logradoEditado.porcentajeCumplimiento)/100
-    this.porcentajeLogrado = Number(this.logradoEditado.logrado1)/100
-    this.porcentajeMeta = Number(this.logradoEditado.meta)/100
+    this.porcentajeCumplimiento = Number(this.logradoEditado.porcentajeCumplimiento) / 100
+    this.porcentajeLogrado = Number(this.logradoEditado.logrado1) / 100
+    this.porcentajeMeta = Number(this.logradoEditado.meta) / 100
   }
 
   addMeta(): void {
@@ -218,9 +218,9 @@ export class IndicadoresComponent implements OnInit {
     logrado.logrado1 = "0";
     logrado.meta = "0";
     logrado.observacion = "Meta Iniciada";
-    logrado.porcentajeCumplimiento =String(Number(logrado.logrado1)/(Number(logrado.meta))*100);
+    logrado.porcentajeCumplimiento = String(Number(logrado.logrado1) / (Number(logrado.meta)) * 100);
 
-    this.indicadoresServices.addMetaLogrado(logrado).subscribe((resp: Logrado)=>{
+    this.indicadoresServices.addMetaLogrado(logrado).subscribe((resp: Logrado) => {
 
     });
 
@@ -281,21 +281,29 @@ export class IndicadoresComponent implements OnInit {
     this.indicadorId = event.idCodigoIndiador;
   }
 
-  porcentajeCumplimientoChange(data: any): void{
-    this.logradoEditado.porcentajeCumplimiento = String(data.value*100);
+  porcentajeCumplimientoChange(data: any): void {
+    this.logradoEditado.porcentajeCumplimiento = String(data.value * 100);
   }
 
-  logradoChange(data: any): void{
+  logradoChange(data: any): void {
     this.logradoEditado.logrado1 = String(data.value);
     this.calcularCumplimiento()
   }
 
-  calcularCumplimiento(){
-    this.porcentajeCumplimiento = (Number(this.logradoEditado.logrado1)/Number(this.logradoEditado.meta));
+  calcularCumplimiento() {
+    this.porcentajeCumplimiento = (Number(this.logradoEditado.logrado1) / Number(this.logradoEditado.meta));
   }
 
-  metaChange(data: any): void{
+  metaChange(data: any): void {
     this.logradoEditado.meta = String(data.value);
   }
 
+  customizeText(arg: any) {
+    return arg.valueText + " %";
+  }
+  customizeTooltip(arg: any) {
+    return {
+      text: arg.valueText + " %"
+    };
+  }
 }

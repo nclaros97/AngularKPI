@@ -64,6 +64,28 @@
                 <dxi-item dataField="formula" editorType="dxTextArea"></dxi-item>
                 <dxi-item dataField="detalle" [colSpan]="2" editorType="dxTextArea"></dxi-item>
               </dx-form>
+              <div *ngIf="indicadorData.data.metaDto.logradoDto">
+                <dx-circular-gauge id="gauge"
+              [value]="indicadorData.data.metaDto.logradoDto.porcentajeCumplimiento"
+                [animation]="{duration:3000,enabled:true}">
+                <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
+                  <dxo-label [customizeText]="customizeText"></dxo-label>
+                </dxo-scale>
+                <dxo-range-container>
+                  <dxi-range [startValue]="0" [endValue]="30" color="#CE2029"></dxi-range>
+                  <dxi-range [startValue]="30" [endValue]="70" color="#FFD700"></dxi-range>
+                  <dxi-range [startValue]="70" [endValue]="100" color="#228B22"></dxi-range>
+                </dxo-range-container>
+                <dxo-export [enabled]="false"></dxo-export>
+                <dxo-title text="Cumplimiento de indicador">
+                  <dxo-font [size]="28"></dxo-font>
+                </dxo-title>
+                <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
+                  <dxo-font color="#DCD0FF" background="#38723a" [size]="25">
+                  </dxo-font>
+                </dxo-tooltip>
+              </dx-circular-gauge>
+              </div>
             </div>
 
             <dxi-item title="Sub Objetivo" template="subObjetivoTemplate"></dxi-item>
@@ -179,24 +201,23 @@
     <div class="dx-field">
       <div class="dx-field-label">Meta</div>
       <div class="dx-field-value">
-        <dx-number-box width="100%" (onValueChanged)="metaChange($event)"
-          [(value)]="porcentajeMeta"></dx-number-box>
+        <dx-number-box width="100%" (onValueChanged)="metaChange($event)" [(value)]="porcentajeMeta"></dx-number-box>
       </div>
     </div>
 
     <div class="dx-field">
       <div class="dx-field-label">Logrado</div>
       <div class="dx-field-value">
-        <dx-number-box width="100%" (onValueChanged)="logradoChange($event)"
-          [(value)]="porcentajeLogrado"></dx-number-box>
+        <dx-number-box width="100%" (onValueChanged)="logradoChange($event)" [(value)]="porcentajeLogrado">
+        </dx-number-box>
       </div>
     </div>
 
     <div class="dx-field">
       <div class="dx-field-label">% Cumplimiento</div>
       <div class="dx-field-value">
-        <dx-number-box [readOnly]="true" width="100%" format="#0%" (onValueChanged)="porcentajeCumplimientoChange($event)"
-          [(value)]="porcentajeCumplimiento"></dx-number-box>
+        <dx-number-box [readOnly]="true" width="100%" format="#0%"
+          (onValueChanged)="porcentajeCumplimientoChange($event)" [(value)]="porcentajeCumplimiento"></dx-number-box>
       </div>
     </div>
     <div class="dx-field">
