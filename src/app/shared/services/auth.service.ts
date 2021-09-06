@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { apis } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import * as moment from 'moment';
+import { navigation } from 'src/app/app-navigation';
+import notify from 'devextreme/ui/notify';
 
 const jwt = new JwtHelperService();
 
@@ -15,7 +17,7 @@ export interface IUser {
   avatarUrl?: string,
   idArea?: number,
   idAreaNavigation?: Area,
-  usuarioTipo?: string,
+  tipo?: string,
   idAgencia?: number
   idAgenciaNavigation?: Agencia
 }
@@ -33,9 +35,9 @@ export class AuthService {
   data =
     {
       isSuccess: false,
-      message: "Invalid Username And Password",
+      message: "",
       data: {}
-  };
+    };
 
   private _lastAuthenticatedPath: string = defaultPath;
   set lastAuthenticatedPath(value: string) {
@@ -52,14 +54,14 @@ export class AuthService {
       const promise = await new Promise((resolve, reject) => {
         const apiURL = endpoint + '/api/usuarios/login/';
         this.http
-          .post<Usuario>(apiURL, {email,password})
+          .post<Usuario>(apiURL, { email, password })
           .toPromise()
           .then((res: any) => {
             // Success
             this.data.data = res.data;
             this.router.navigate([this._lastAuthenticatedPath]);
             this.data.isSuccess = res.isSuccess;
-            if(res.isSuccess){
+            if (res.isSuccess) {
               this.saveToken(res.data.token);
             }
             resolve(this.data);
@@ -93,7 +95,13 @@ export class AuthService {
   async getUser() {
     try {
       // Send request
-
+      this._user = JSON.parse(localStorage.getItem('auth_meta')!);
+      if (this._user == undefined) {
+        return {
+          isOk: false,
+          data: null
+        };
+      }
       return {
         isOk: true,
         data: this._user
@@ -163,6 +171,7 @@ export class AuthService {
     this._user = null;
     localStorage.removeItem('auth_tkn');
     localStorage.removeItem('auth_meta');
+    localStorage.removeItem('menuData');
     this.router.navigate(['/login-form']);
   }
 }
@@ -172,7 +181,14 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
+    const accesos = navigation;
     const isLoggedIn = this.authService.loggedIn;
+    let userRol = "";
+    if (isLoggedIn) {
+      let userData = JSON.parse(localStorage.getItem('auth_meta')!);
+      userRol = userData.tipo;
+    }
+
     const isAuthForm = [
       'login-form',
       'reset-password',
@@ -193,7 +209,21 @@ export class AuthGuardService implements CanActivate {
     if (isLoggedIn) {
       this.authService.lastAuthenticatedPath = route.routeConfig?.path || defaultPath;
     }
+    let pag = route.routeConfig?.path;
+    let tieneAcceso = true;
+    accesos.forEach(acceso => {
+      acceso.items!.forEach(item => {
+        if (item.path == "/" + pag) {
+          if (item.roles.find(x => x.rol == userRol) == undefined) {
+            this.authService.lastAuthenticatedPath = defaultPath;
+            this.router.navigate([defaultPath]);
+            notify("No tiene acceso a esta página", 'error', 2000);
+            tieneAcceso = false;
+          }
+        }
+      });
+    });
 
-    return isLoggedIn || isAuthForm;
+    return isLoggedIn || isAuthForm /* || tieneAcceso */;
   }
 }

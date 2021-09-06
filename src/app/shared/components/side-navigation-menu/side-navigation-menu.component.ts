@@ -31,17 +31,19 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     this.menu.instance.selectItem(value);
   }
 
-  private _items!: Record <string, unknown>[];
+  private _items!: Record<string, unknown>[];
   get items() {
+    //let items = JSON.parse(localStorage.getItem("menuData")!);
     if (!this._items) {
-      this._items = navigation.map((item) => {
-        if(item.path && !(/^\//.test(item.path))){
-          item.path = `/${item.path}`;
-        }
-         return { ...item, expanded: !this._compactMode }
-        });
-    }
-
+    this._items = navigation.map((item) => {
+      if(item.path && !(/^\//.test(item.path))){
+        item.path = `/${item.path}`;
+      }
+      this.enableItemsByUserRole(item);
+      return { ...item, expanded: !this._compactMode }
+    });
+    //localStorage.setItem("menuData", JSON.stringify(this._items))
+  }
     return this._items;
   }
 
@@ -66,6 +68,21 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
 
   constructor(private elementRef: ElementRef) { }
 
+  enableItemsByUserRole(item: any) {
+
+    let userData = JSON.parse(localStorage.getItem("auth_meta")!);
+
+    if (userData != undefined) {
+      item.items.forEach((x: { roles: string | any; visible: boolean; }) => {
+        let estaEnRol = x.roles.find((y: { rol: string; }) => y.rol == userData.tipo) != undefined ? true : false;
+        if (x.roles != undefined && estaEnRol == false) {
+          x.visible = false;
+        }
+      });
+    }
+
+  }
+
   onItemClick(event: ItemClickEvent) {
     this.selectedItemChanged.emit(event);
   }
@@ -82,8 +99,8 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
 }
 
 @NgModule({
-  imports: [ DxTreeViewModule ],
-  declarations: [ SideNavigationMenuComponent ],
-  exports: [ SideNavigationMenuComponent ]
+  imports: [DxTreeViewModule],
+  declarations: [SideNavigationMenuComponent],
+  exports: [SideNavigationMenuComponent]
 })
 export class SideNavigationMenuModule { }
