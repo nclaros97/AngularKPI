@@ -1,6 +1,15 @@
 :host {
   width: 100%;
 }
+.toolbar-label{
+  display: inline-flex;
+  align-content: center;
+  align-items: center;
+}
+
+.imgLogoTitulo{
+  margin-left: 5%;
+}
 
 .container {
   height: 100%;

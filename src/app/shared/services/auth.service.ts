@@ -64,6 +64,7 @@ export class AuthService {
             this.data.data = res.data;
             this.router.navigate([this._lastAuthenticatedPath]);
             this.data.isSuccess = res.isSuccess;
+            this.data.message = res.message;
             if (res.isSuccess) {
               this.saveToken(res.data.token);
             }
@@ -82,7 +83,7 @@ export class AuthService {
     catch {
       return {
         isSuccess: false,
-        message: "Authentication failed"
+        message: "Error de conexión"
       };
     }
   }
