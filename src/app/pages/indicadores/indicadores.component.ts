@@ -287,7 +287,7 @@ export class IndicadoresComponent implements OnInit {
 
   logradoChange(data: any): void {
     this.logradoEditado.logrado1 = String(data.value);
-    this.calcularCumplimiento()
+    this.calcularCumplimiento();
   }
 
   calcularCumplimiento() {
@@ -296,6 +296,7 @@ export class IndicadoresComponent implements OnInit {
 
   metaChange(data: any): void {
     this.logradoEditado.meta = String(data.value);
+    this.calcularCumplimiento();
   }
 
   customizeText(arg: any) {
