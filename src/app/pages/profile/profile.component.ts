@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Usuario } from 'src/app/shared/components/user-panel/models/user';
+import { AuthService } from 'src/app/shared/services';
 
 @Component({
   templateUrl: 'profile.component.html',
@@ -6,28 +8,23 @@ import { Component } from '@angular/core';
 })
 
 export class ProfileComponent {
-  employee: any;
+  usuario: Usuario;
   colCountByScreen: object;
 
-  constructor() {
-    this.employee = {
-      ID: 7,
-      FirstName: 'Sandra',
-      LastName: 'Johnson',
-      Prefix: 'Mrs.',
-      Position: 'Controller',
-      Picture: 'user.png',
-      BirthDate: new Date('1974/11/15'),
-      HireDate: new Date('2005/05/11'),
-      /* tslint:disable-next-line:max-line-length */
-      Notes: 'Sandra is a CPA and has been our controller since 2008. She loves to interact with staff so if you`ve not met her, be certain to say hi.\r\n\r\nSandra has 2 daughters both of whom are accomplished gymnasts.',
-      Address: '4600 N Virginia Rd.'
-    };
+  constructor(private authService: AuthService) {
+    this.usuario = new Usuario();
+    this.getUsuarioLogeado();
     this.colCountByScreen = {
       xs: 1,
       sm: 2,
       md: 3,
       lg: 4
     };
+  }
+  async getUsuarioLogeado(): Promise<void>{
+    let userData = await this.authService.getUser();
+    this.authService.getUserById(userData.data!.userId||0).subscribe(user => {
+      this.usuario = user as Usuario;
+    });
   }
 }

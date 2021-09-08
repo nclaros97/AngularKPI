@@ -31,6 +31,7 @@ import {
 } from 'devextreme-angular';
 import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 import { TiemposComponent } from './pages/tiempos/tiempos.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { TiemposComponent } from './pages/tiempos/tiempos.component';
     AreasComponent,
     ObjetivosComponent,
     IndicadoresComponent,
-    TiemposComponent
+    TiemposComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,

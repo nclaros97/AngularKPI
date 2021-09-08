@@ -73,10 +73,23 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     let userData = JSON.parse(localStorage.getItem("auth_meta")!);
 
     if (userData != undefined) {
+
+      //habilitar menu principal
+        if(item.rolesMenu.length>0){
+          let estaEnRol = item.rolesMenu.find((y: { rol: string; }) => y.rol == userData.tipo) != undefined ? true : false;
+        if (item.rolesMenu != undefined && estaEnRol == false) {
+          item.visible = false;
+        }
+        }
+
+
+      //habilitar subMenus
       item.items.forEach((x: { roles: string | any; visible: boolean; }) => {
-        let estaEnRol = x.roles.find((y: { rol: string; }) => y.rol == userData.tipo) != undefined ? true : false;
+        if(x.roles){
+          let estaEnRol = x.roles.find((y: { rol: string; }) => y.rol == userData.tipo) != undefined ? true : false;
         if (x.roles != undefined && estaEnRol == false) {
           x.visible = false;
+        }
         }
       });
     }

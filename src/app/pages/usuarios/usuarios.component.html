@@ -1,0 +1,51 @@
+<div class="container-fluid mt-10">
+  <div class="card">
+    <div class="card-header">
+      <h4>Lista de Usuarios</h4>
+    </div>
+    <div class="card-body">
+      <dx-data-grid [dataSource]="usuarios" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
+        [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
+        (onRowUpdated)="updateUsuario($event.data)" (onRowRemoved)="deleteUsuario($event.data.idUsuario)"
+        (onRowInserted)="addUsuario($event.data)">
+
+        <dxo-scrolling rowRenderingMode="virtual">
+        </dxo-scrolling>
+        <dxo-paging [pageSize]="10">
+        </dxo-paging>
+        <dxo-pager [visible]="true" allowedPageSizes="true" displayMode="full" [showPageSizeSelector]="true"
+          [showInfo]="true" [showNavigationButtons]="true">
+        </dxo-pager>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+
+        <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true"
+          [texts]="textoEditarRowGrid">
+          <dxo-popup title="Usuarios" [showTitle]="true" [width]="700" [height]="525">
+          </dxo-popup>
+        </dxo-editing>
+
+        <dxi-column dataField="idUsuario" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
+        </dxi-column>
+        <dxi-column dataField="email" caption="Email" alignment="center">
+        </dxi-column>
+        <dxi-column dataField="contraseña" caption="Password" [visible]="false" alignment="center">
+        </dxi-column>
+        <dxi-column dataField="usuarioTipo" caption="Tipo" [width]="125" [visible]="true">
+          <dxo-lookup [dataSource]="tiposUsuario" displayExpr="tipo" valueExpr="tipo">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="idAgencia" caption="Agencia" [visible]="true">
+          <dxo-lookup [dataSource]="agencias" displayExpr="nombreAgencia" valueExpr="idAgencia">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="idArea" caption="Area" [visible]="true">
+          <dxo-lookup [dataSource]="areas" displayExpr="nombreArea" valueExpr="idArea">
+          </dxo-lookup>
+        </dxi-column>
+
+      </dx-data-grid>
+    </div>
+  </div>
+
+</div>

@@ -2,16 +2,21 @@
 
 <div class="content-block dx-card responsive-paddings">
   <div class="form-avatar">
-    <img src="assets/img/{{employee.Picture}}"/>
+    <img src="assets/img/user.png"/>
   </div>
-  <span>{{employee.Notes}}</span>
 </div>
 
 <div class="content-block dx-card responsive-paddings">
   <dx-form id="form"
-    [formData]="employee"
+    [formData]="usuario"
     labelLocation="top"
     [colCountByScreen]="colCountByScreen"
+    [readOnly]="true"
   >
+  <dxi-item dataField="idUsuario"></dxi-item>
+  <dxi-item dataField="email"></dxi-item>
+  <dxi-item dataField="usuarioTipo"></dxi-item>
+  <dxi-item dataField="idAgenciaNavigation.nombreAgencia"><dxo-label text="Agencia"></dxo-label></dxi-item>
+  <dxi-item dataField="idAreaNavigation.nombreArea"><dxo-label text="Área"></dxo-label></dxi-item>
   </dx-form>
 </div>

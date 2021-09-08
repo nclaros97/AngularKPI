@@ -64,7 +64,7 @@
                 <dxi-item dataField="formula" editorType="dxTextArea"></dxi-item>
                 <dxi-item dataField="detalle" [colSpan]="2" editorType="dxTextArea"></dxi-item>
               </dx-form>
-              <div *ngIf="indicadorData.data.metaDto.logradoDto">
+              <div *ngIf="indicadorData.data.metaDto && indicadorData.data.metaDto.logradoDto">
                 <dx-circular-gauge id="gauge"
               [value]="indicadorData.data.metaDto.logradoDto.porcentajeCumplimiento"
                 [animation]="{duration:3000,enabled:true}">

@@ -4,12 +4,21 @@ export const navigation = [
     path: '/inicio',
     icon: 'home',
     items: [],
+    rolesMenu:[],
     visible: true
   },
   {
     text: 'Administración',
     icon: 'folder',
     visible: true,
+    rolesMenu:[
+      {
+        rol: 'Admin'
+      },
+      {
+        rol: 'User'
+      }
+    ],
     items: [
       {
         text: 'Agencias',
@@ -71,5 +80,25 @@ export const navigation = [
         visible: true,
       },
     ]
+  },
+  {
+    text: 'Admin Usuarios',
+    icon: 'user',
+    items: [{
+      text: 'Usuarios',
+      path: '/usuarios',
+      roles:[
+        {
+          rol: 'Admin'
+        }
+      ],
+      visible: true,
+    },],
+    rolesMenu:[
+      {
+        rol: 'Admin'
+      }
+    ],
+    visible: true
   }
 ];

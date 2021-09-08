@@ -200,8 +200,8 @@ export class IndicadoresComponent implements OnInit {
     this.meta.idCodigoIndiador = this.indicadorId;
     this.logradoEditado = logrado;
     this.porcentajeCumplimiento = Number(this.logradoEditado.porcentajeCumplimiento) / 100
-    this.porcentajeLogrado = Number(this.logradoEditado.logrado1) / 100
-    this.porcentajeMeta = Number(this.logradoEditado.meta) / 100
+    this.porcentajeLogrado = Number(this.logradoEditado.logrado1)
+    this.porcentajeMeta = Number(this.logradoEditado.meta)
   }
 
   addMeta(): void {

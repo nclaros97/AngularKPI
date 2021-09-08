@@ -11,11 +11,17 @@ import { AreasComponent } from './pages/areas/areas.component';
 import { ObjetivosComponent } from './pages/objetivos/objetivos.component';
 import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 import { TiemposComponent } from './pages/tiempos/tiempos.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 const routes: Routes = [
   {
     path: 'agencias',
     component: AgenciasComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'usuarios',
+    component: UsuariosComponent,
     canActivate: [ AuthGuardService ]
   },
   {

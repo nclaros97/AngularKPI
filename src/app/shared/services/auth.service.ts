@@ -3,16 +3,19 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Area } from 'src/app/pages/areas/models/area';
 import { Usuario } from '../components/user-panel/models/user';
 import { Agencia } from '../../pages/agencias/models/agencia';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { apis } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import * as moment from 'moment';
 import { navigation } from 'src/app/app-navigation';
 import notify from 'devextreme/ui/notify';
+import { throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 const jwt = new JwtHelperService();
 
 export interface IUser {
+  userId?: number
   email: string;
   avatarUrl?: string,
   idArea?: number,
@@ -99,7 +102,7 @@ export class AuthService {
       if (this._user == undefined) {
         return {
           isOk: false,
-          data: null
+          data: this._user
         };
       }
       return {
@@ -110,9 +113,16 @@ export class AuthService {
     catch {
       return {
         isOk: false,
-        data: null
+        data: this._user
       };
     }
+  }
+
+  getUserById(id: number){
+    return this.http.get(apis.kpiApi + '/api/usuarios/' + id).pipe(
+      map(this.extractData),
+      catchError(this.handleError)
+    );
   }
 
   async createAccount(email: string, password: string) {
@@ -173,6 +183,23 @@ export class AuthService {
     localStorage.removeItem('auth_meta');
     localStorage.removeItem('menuData');
     this.router.navigate(['/login-form']);
+  }
+  private extractData(res: any): any {
+    const body = res;
+    return body || {};
+  }
+
+  private handleError(error: HttpErrorResponse): any {
+    if (error.error instanceof ErrorEvent) {
+      console.error('An error occurred:', error.error.message);
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+      console.log(error);
+    }
+    return throwError(
+      'Something bad happened; please try again later.');
   }
 }
 
