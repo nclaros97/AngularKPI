@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import DataSource from 'devextreme/data/data_source';
 import { variablesGenerales } from 'src/app/shared/variables/variables';
@@ -7,6 +7,10 @@ import { AreaService } from '../areas/services/area.service';
 import { Objetivo } from './models/objetivo';
 import { SubObjetivo } from './models/subObjetivo';
 import { ObjetivosService } from './services/objetivos.service';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 
 @Component({
   selector: 'app-objetivos',
@@ -14,6 +18,7 @@ import { ObjetivosService } from './services/objetivos.service';
   styleUrls: ['./objetivos.component.scss']
 })
 export class ObjetivosComponent implements OnInit {
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent | undefined;
 
   objetivos: Objetivo[] = [];
   areas: Area[] = [];
@@ -35,7 +40,6 @@ export class ObjetivosComponent implements OnInit {
   }
 
   getObjetivos(): void {
-    debugger;
     this.objetivosService.getObjetivos().subscribe((resp: Objetivo[]) => {
       this.objetivos = resp;
       console.log(this.objetivos);
@@ -87,7 +91,6 @@ export class ObjetivosComponent implements OnInit {
   }
 
   addSubObjetivo(subObjetivo: SubObjetivo): void {
-    subObjetivo.idArea = this.areaId;
     subObjetivo.idObjetivo = this.objetivoId;
 
     let objetivo: Objetivo | undefined = undefined;
@@ -163,4 +166,13 @@ export class ObjetivosComponent implements OnInit {
     });
   }
 
+  exportGrid() {
+    const doc = new jsPDF();
+    exportDataGridToPdf({
+      jsPDFDocument: doc,
+      component: this.dataGrid!.instance
+    }).then(() => {
+      doc.save('objetivos.pdf');
+    })
+  }
 }

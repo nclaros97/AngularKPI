@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Indicador } from './models/indicadores';
 import { IndicadoresServices } from './services/indicadoresServices';
@@ -15,6 +15,10 @@ import notify from 'devextreme/ui/notify';
 import { Logrado } from './models/logrado';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 
 @Component({
   selector: 'app-indicadores',
@@ -22,7 +26,7 @@ import ArrayStore from 'devextreme/data/array_store';
   styleUrls: ['./indicadores.component.scss']
 })
 export class IndicadoresComponent implements OnInit {
-
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent | undefined;
   constructor(private indicadoresServices: IndicadoresServices, private router: Router, private ref: ChangeDetectorRef) { }
 
   indicadores: Indicador[] = [];
@@ -62,6 +66,7 @@ export class IndicadoresComponent implements OnInit {
   meta: Meta = new Meta;
   logradoEditado: Logrado = new Logrado;
   dataSource: any;
+  eliminado: boolean = false;
 
   ngOnInit(): void {
     const that = this;
@@ -78,13 +83,6 @@ export class IndicadoresComponent implements OnInit {
       icon: "add",
       text: "Agregar",
       onClick: function (e: any) {
-        notify({
-          message: "Meta registrada",
-          position: {
-            my: "center top",
-            at: "center top"
-          }
-        }, "success", 3000);
         that.addMeta();
       }
     };
@@ -205,8 +203,19 @@ export class IndicadoresComponent implements OnInit {
   }
 
   addMeta(): void {
+
     let meta = new Meta;
     meta.idAreaAgencia = this.gridBoxValue[0];
+    if(meta.idAreaAgencia == undefined){
+      notify({
+        message: "Seleccione el area de la agencia",
+        position: {
+          my: "center top",
+          at: "center top"
+        }
+      }, "warning", 3000);
+      return;
+    }
     meta.idCodigoIndiador = this.indicadorId;
     this.indicadoresServices.addMeta(meta).subscribe((resp: Meta) => {
       meta.idAreaAgencia = resp.idCodigoIndiador;
@@ -218,19 +227,32 @@ export class IndicadoresComponent implements OnInit {
     logrado.logrado1 = "0";
     logrado.meta = "0";
     logrado.observacion = "Meta Iniciada";
-    logrado.porcentajeCumplimiento = String(Number(logrado.logrado1) / (Number(logrado.meta)) * 100);
+    logrado.porcentajeCumplimiento = "0";
 
     this.indicadoresServices.addMetaLogrado(logrado).subscribe((resp: Logrado) => {
-
+      this.getMetaLogrado(this.indicadorId);
     });
 
     this.popupVisible = false;
+    notify({
+      message: "Meta registrada",
+      position: {
+        my: "center top",
+        at: "center top"
+      }
+    }, "success", 3000);
+  }
+  getMetaLogrado(indicadorId: Number) {
+    this.indicadoresServices.getMetaLogrado(indicadorId).subscribe((resp: Meta) => {
+      this.indicadores.find(x=>x.idCodigoIndiador == indicadorId)!.metaDto = resp;
+    });
   }
   updateMeta(meta: Meta): void {
     this.indicadoresServices.updateMeta(meta).subscribe((resp: Meta) => {
       console.log(resp);
     });
   }
+  mostrarDatosMeta : boolean = true;
   deleteMeta(meta: Meta): void {
     this.indicadoresServices.deleteMeta(meta).subscribe((resp: Meta) => {
       console.log(resp);
@@ -240,6 +262,9 @@ export class IndicadoresComponent implements OnInit {
     logrado.idCodigoIndiador = this.indicadorId;
     this.indicadoresServices.deleteMetaLogrado(logrado).subscribe((resp: Meta) => {
       console.log(resp);
+      this.getMetaLogrado(this.indicadorId);
+      this.eliminado = true;
+      this.mostrarDatosMeta = false;
     });
     notify({
       message: "Meta eliminada",
@@ -307,4 +332,14 @@ export class IndicadoresComponent implements OnInit {
       text: arg.valueText + " %"
     };
   }
+  exportGrid() {
+    const doc = new jsPDF();
+    exportDataGridToPdf({
+      jsPDFDocument: doc,
+      component: this.dataGrid!.instance
+    }).then(() => {
+      doc.save('indicadores.pdf');
+    })
+  }
+
 }

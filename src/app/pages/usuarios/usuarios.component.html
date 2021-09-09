@@ -4,6 +4,8 @@
       <h4>Lista de Usuarios</h4>
     </div>
     <div class="card-body">
+      <dx-button id="exportButton" icon="exportpdf" text="Exportar a PDF" (onClick)="exportGrid()">
+      </dx-button>
       <dx-data-grid [dataSource]="usuarios" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
         [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
         (onRowUpdated)="updateUsuario($event.data)" (onRowRemoved)="deleteUsuario($event.data.idUsuario)"
@@ -28,20 +30,25 @@
         <dxi-column dataField="idUsuario" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
         </dxi-column>
         <dxi-column dataField="email" caption="Email" alignment="center">
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="contraseña" caption="Password" [visible]="false" alignment="center">
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="usuarioTipo" caption="Tipo" [width]="125" [visible]="true">
           <dxo-lookup [dataSource]="tiposUsuario" displayExpr="tipo" valueExpr="tipo">
           </dxo-lookup>
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="idAgencia" caption="Agencia" [visible]="true">
           <dxo-lookup [dataSource]="agencias" displayExpr="nombreAgencia" valueExpr="idAgencia">
           </dxo-lookup>
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="idArea" caption="Area" [visible]="true">
           <dxo-lookup [dataSource]="areas" displayExpr="nombreArea" valueExpr="idArea">
           </dxo-lookup>
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
 
       </dx-data-grid>

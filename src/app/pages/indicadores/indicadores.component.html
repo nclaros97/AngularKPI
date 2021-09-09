@@ -4,6 +4,8 @@
       <h4>Lista de Indicadores</h4>
     </div>
     <div class="card-body">
+      <dx-button id="exportButton" icon="exportpdf" text="Exportar a PDF" (onClick)="exportGrid()">
+      </dx-button>
       <dx-data-grid [dataSource]="indicadores" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true"
         [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true"
         (onRowUpdated)="updateIndicador($event.data)" (onRowRemoved)="deleteIndicador($event.data.idCodigoIndiador)"
@@ -29,14 +31,18 @@
           alignment="center">
         </dxi-column>
         <dxi-column dataField="nombreIndicador" caption="Indicador" alignment="center">
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
 
         <dxi-column dataField="responsables" caption="Responsable" alignment="center">
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
 
         <dxi-column dataField="proceso" caption="Proceso" alignment="center" [visible]="false">
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="formula" caption="Formula" alignment="center" [visible]="false">
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="detalle" caption="Detalle" alignment="center" [visible]="false">
         </dxi-column>
@@ -44,14 +50,17 @@
         <dxi-column dataField="idTiempo" caption="Tiempo" [width]="125" [visible]="true">
           <dxo-lookup [dataSource]="tiempos" displayExpr="nombrePeriodo" valueExpr="idTiempo">
           </dxo-lookup>
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="idSubobjetivos" caption="Sub Objetivo" [width]="130" [visible]="true">
           <dxo-lookup [dataSource]="subObjetivos" displayExpr="nombreSubobjetivo" valueExpr="idSubobjetivos">
           </dxo-lookup>
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
         <dxi-column dataField="estado" caption="Estado" [width]="130" [visible]="true">
           <dxo-lookup [dataSource]="estados" displayExpr="nombreEstado" valueExpr="nombreEstado">
           </dxo-lookup>
+          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
         </dxi-column>
 
         <div *dxTemplate="let indicadorData of 'indicadorTemp'">
@@ -65,26 +74,25 @@
                 <dxi-item dataField="detalle" [colSpan]="2" editorType="dxTextArea"></dxi-item>
               </dx-form>
               <div *ngIf="indicadorData.data.metaDto && indicadorData.data.metaDto.logradoDto">
-                <dx-circular-gauge id="gauge"
-              [value]="indicadorData.data.metaDto.logradoDto.porcentajeCumplimiento"
-                [animation]="{duration:3000,enabled:true}">
-                <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
-                  <dxo-label [customizeText]="customizeText"></dxo-label>
-                </dxo-scale>
-                <dxo-range-container>
-                  <dxi-range [startValue]="0" [endValue]="30" color="#CE2029"></dxi-range>
-                  <dxi-range [startValue]="30" [endValue]="70" color="#FFD700"></dxi-range>
-                  <dxi-range [startValue]="70" [endValue]="100" color="#228B22"></dxi-range>
-                </dxo-range-container>
-                <dxo-export [enabled]="false"></dxo-export>
-                <dxo-title text="Cumplimiento de indicador">
-                  <dxo-font [size]="28"></dxo-font>
-                </dxo-title>
-                <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
-                  <dxo-font color="#DCD0FF" background="#38723a" [size]="25">
-                  </dxo-font>
-                </dxo-tooltip>
-              </dx-circular-gauge>
+                <dx-circular-gauge id="gauge" [value]="indicadorData.data.metaDto.logradoDto.porcentajeCumplimiento"
+                  [animation]="{duration:3000,enabled:true}">
+                  <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
+                    <dxo-label [customizeText]="customizeText"></dxo-label>
+                  </dxo-scale>
+                  <dxo-range-container>
+                    <dxi-range [startValue]="0" [endValue]="30" color="#CE2029"></dxi-range>
+                    <dxi-range [startValue]="30" [endValue]="70" color="#FFD700"></dxi-range>
+                    <dxi-range [startValue]="70" [endValue]="100" color="#228B22"></dxi-range>
+                  </dxo-range-container>
+                  <dxo-export [enabled]="false"></dxo-export>
+                  <dxo-title text="Cumplimiento de indicador">
+                    <dxo-font [size]="28"></dxo-font>
+                  </dxo-title>
+                  <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
+                    <dxo-font color="#DCD0FF" background="#38723a" [size]="25">
+                    </dxo-font>
+                  </dxo-tooltip>
+                </dx-circular-gauge>
               </div>
             </div>
 
@@ -110,13 +118,17 @@
 
             <dxi-item title="Meta" template="metaTemplate"></dxi-item>
             <div *dxTemplate="let metaItem of 'metaTemplate'">
-              <dx-button *ngIf="indicadorData.data.metaDto == undefined" text="Agregar Meta" type="success"
-                style="margin-top: 20px" (onClick)="showPopUp($event)">
+              <dx-button
+                *ngIf="indicadorData.data.metaDto == undefined || eliminado"
+                text="Agregar Meta" type="success" style="margin-top: 20px" (onClick)="showPopUp($event)">
               </dx-button>
-              <dx-button *ngIf="indicadorData.data.metaDto != undefined" text="Eliminar Meta" type="danger"
-                style="margin-left: 10px; margin-top: 20px" (onClick)="deleteMeta(indicadorData.data.metaDto)">
+              <dx-button
+                *ngIf="indicadorData.data.metaDto != undefined && eliminado == false"
+                text="Eliminar Meta" type="danger" style="margin-left: 10px; margin-top: 20px"
+                (onClick)="deleteMeta(indicadorData.data.metaDto)">
               </dx-button>
-              <div *ngIf="indicadorData.data.metaDto != undefined">
+              <div
+                *ngIf="indicadorData.data.metaDto != undefined && mostrarDatosMeta">
                 <dx-form id="formContainer" [formData]="indicadorData.data.metaDto" [colCount]="2" [readOnly]="true"
                   [scrollingEnabled]="true" width="80%" [showColonAfterLabel]="true">
                   <dxi-item dataField="areaAgenciaDto.areaDto.nombreArea">
@@ -155,7 +167,7 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="indicadorData.data.metaDto == undefined" style="margin-top: 20px">
+              <div *ngIf="indicadorData.data.metaDto == undefined || eliminado" style="margin-top: 20px">
                 <div class="alert alert-primary" role="alert">
                   No se ha encontrado meta registrada
                 </div>

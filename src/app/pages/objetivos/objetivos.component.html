@@ -4,6 +4,8 @@
             <h4>Lista de Objetivos</h4>
         </div>
         <div class="card-body">
+          <dx-button id="exportButton" icon="exportpdf" text="Exportar a PDF" (onClick)="exportGrid()">
+          </dx-button>
             <dx-data-grid [dataSource]="objetivos" [hoverStateEnabled]="true" [showBorders]="true" [columnAutoWidth]="true" [repaintChangesOnly]="true" [showColumnLines]="true" [showRowLines]="true" (onRowUpdated)="updateObjetivo($event.data)" (onRowRemoved)="deleteObjetivo($event.data.idObjetivo)"
                 (onRowInserted)="addObjetivo($event.data)" (onRowExpanding)="handleRowColapsed($event.key)">
 
@@ -24,8 +26,8 @@
                     </dxo-popup>
                     <dxo-form>
                         <dxi-item itemType="group" [colCount]="2" [colSpan]="2">
-                            <dxi-item dataField="nombreObjetivo"></dxi-item>
-                            <dxi-item dataField="porcentajeObjetivo"></dxi-item>
+                            <dxi-item dataField="nombreObjetivo"><dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule></dxi-item>
+                            <dxi-item dataField="porcentajeObjetivo"><dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule></dxi-item>
                         </dxi-item>
                     </dxo-form>
                 </dxo-editing>
@@ -54,26 +56,21 @@
                         <dxo-editing mode="popup" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true" [texts]="textoEditarRowGrid">
                             <dxo-popup title="Sub Objetivos" [showTitle]="true" [width]="700" [height]="525">
                             </dxo-popup>
-                            <dxo-form>
-                                <dxi-item dataField="nombreSubobjetivo"></dxi-item>
-                                <dxi-item dataField="subObjetivo" caption="% Sub Objetivo"></dxi-item>
-                                <dxi-item template="areaSelectBox">
-                                    <dxo-label text="Área"></dxo-label>
-                                </dxi-item>
-                                <div *dxTemplate="let selectBoxItem of 'areaSelectBox'">
-                                    <dx-select-box [(value)]="areaId" [dataSource]="areas" [deferRendering]="false" valueExpr="idArea" displayExpr="nombreArea" (onValueChanged)="handleValueChange($event)">
-                                    </dx-select-box>
-                                </div>
-                            </dxo-form>
+
                         </dxo-editing>
 
                         <dxi-column dataField="idSubobjetivos" caption="Código" [width]="150" [allowEditing]="false" alignment="center">
                         </dxi-column>
                         <dxi-column dataField="nombreSubobjetivo" caption="Nombre" alignment="center" [width]="300">
+                          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
                         </dxi-column>
                         <dxi-column dataField="subObjetivo" caption="% Sub Objetivo" alignment="center">
+                          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
                         </dxi-column>
-                        <dxi-column dataField="areaDto.nombreArea" caption="Área" alignment="center">
+                        <dxi-column dataField="idArea" caption="Área" alignment="center">
+                          <dxo-lookup [dataSource]="areas" displayExpr="nombreArea" valueExpr="idArea">
+                          </dxo-lookup>
+                          <dxi-validation-rule type="required" message="Dato requerido"></dxi-validation-rule>
                         </dxi-column>
 
                     </dx-data-grid>
