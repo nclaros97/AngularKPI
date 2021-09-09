@@ -32,6 +32,7 @@ import {
 import { IndicadoresComponent } from './pages/indicadores/indicadores.component';
 import { TiemposComponent } from './pages/tiempos/tiempos.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,7 @@ import { UsuariosComponent } from './pages/usuarios/usuarios.component';
     DxNumberBoxModule,
     DxCircularGaugeModule
   ],
-  providers: [AuthService, ScreenService, AppInfoService, AgenciaService],
+  providers: [AuthService, ScreenService, AppInfoService, AgenciaService,DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

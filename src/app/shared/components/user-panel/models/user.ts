@@ -9,6 +9,8 @@ export class Usuario {
   idAreaNavigation:Area;
   usuarioTipo: string;
   idAgencia: number;
+  nuevoPassword: boolean = false;
+  fechaNuevoPassword: Date = new Date;
   idAgenciaNavigation: Agencia;
   constructor() {
    this.idUsuario = 0;
