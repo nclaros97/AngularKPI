@@ -338,7 +338,7 @@ export class IndicadoresComponent implements OnInit {
       jsPDFDocument: doc,
       component: this.dataGrid!.instance
     }).then(() => {
-      doc.save('indicadores.pdf');
+      doc.output('dataurlnewwindow');
     })
   }
 

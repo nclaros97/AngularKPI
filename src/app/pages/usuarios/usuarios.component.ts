@@ -71,7 +71,7 @@ export class UsuariosComponent implements OnInit {
       jsPDFDocument: doc,
       component: this.dataGrid!.instance
     }).then(() => {
-      doc.save('usuarios.pdf');
+      doc.output('dataurlnewwindow');
     })
   }
 }

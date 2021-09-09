@@ -50,7 +50,6 @@ export class UsuariosService {
   }
 
   deleteUsuario(areaId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + '/api/usuarios/delete/'+areaId).pipe(
       map(this.extractData),
       catchError(this.handleError)

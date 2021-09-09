@@ -36,7 +36,6 @@ export class AreaService {
   }
 
   deleteArea(areaId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + '/api/areas/delete/'+areaId).pipe(
       map(this.extractData),
       catchError(this.handleError)

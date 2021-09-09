@@ -36,7 +36,6 @@ export class TiemposServicesService {
   }
 
   deleteTiempo(tiempoId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + 'delete/'+tiempoId).pipe(
       map(this.extractData),
       catchError(this.handleError)

@@ -37,7 +37,6 @@ export class ObjetivosService {
   }
 
   deleteObjetivo(objetivoId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + '/api/objetivoes/delete/'+objetivoId).pipe(
       map(this.extractData),
       catchError(this.handleError)
@@ -59,7 +58,6 @@ export class ObjetivosService {
   }
 
   deleteSubObjetivo(objetivoId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + '/api/subObjetivos/delete/'+objetivoId).pipe(
       map(this.extractData),
       catchError(this.handleError)
@@ -81,7 +79,6 @@ export class ObjetivosService {
   }
 
   deleteSubObjetivoArea(subObjetivoAreaId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + '/api/subobjetivosAreas/delete/'+subObjetivoAreaId).pipe(
       map(this.extractData),
       catchError(this.handleError)

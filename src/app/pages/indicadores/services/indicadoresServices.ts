@@ -101,7 +101,6 @@ export class IndicadoresServices {
   }
 
   deleteIndicador(indicadorId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + 'delete/' + indicadorId).pipe(
       map(this.extractData),
       catchError(this.handleError)
@@ -124,8 +123,6 @@ export class IndicadoresServices {
   }
 
   deleteMeta(meta: Meta): Observable<any> {
-    debugger;
-
     return this.http.request('DELETE', apis.kpiApi + '/api/metas/delete/', {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

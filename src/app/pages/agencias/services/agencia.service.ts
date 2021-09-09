@@ -45,7 +45,7 @@ export class AgenciaService {
   }
 
   deleteAgencia(agenciaId: number): Observable<any> {
-    debugger;
+
     return this.http.delete(endpoint + '/api/agencias/delete/'+agenciaId).pipe(
       map(this.extractData),
       catchError(this.handleError)
@@ -60,7 +60,6 @@ export class AgenciaService {
   }
 
   updateAgenciaArea(areaAgencia: AreaAgencia): Observable<any> {
-    debugger;
     return this.http.put(endpoint + '/api/areaAgencias/edit/'+areaAgencia.idAreaAgencia,areaAgencia).pipe(
       map(this.extractData),
       catchError(this.handleError)
@@ -68,7 +67,6 @@ export class AgenciaService {
   }
 
   deleteAgenciaArea(areaAgenciaId: number): Observable<any> {
-    debugger;
     return this.http.delete(endpoint + '/api/areaAgencias/delete/'+areaAgenciaId).pipe(
       map(this.extractData),
       catchError(this.handleError)

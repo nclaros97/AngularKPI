@@ -68,7 +68,6 @@ export class ObjetivosComponent implements OnInit {
   }
 
   handleValueChange(event: any): void {
-    debugger;
     this.areaId = event.value;
   }
 
@@ -114,7 +113,6 @@ export class ObjetivosComponent implements OnInit {
     }
   }
   updateSubObjetivo(subObjetivo: SubObjetivo): void {
-    subObjetivo.idArea = this.areaId;
     subObjetivo.idObjetivo = this.objetivoId;
     this.objetivosService.updateSubObjetivo(subObjetivo).subscribe((resp: SubObjetivo) => {
       subObjetivo.areaDto = this.areas.find(x => x.idArea == resp.idArea) || { idArea: 0, nombreArea: '',idAreaAgencia:0 };
@@ -133,7 +131,6 @@ export class ObjetivosComponent implements OnInit {
 
     let objetivo: Objetivo | undefined = undefined;
     objetivo = this.objetivos.find(x => x.idObjetivo == this.objetivoId);
-    debugger;
     if (this.sumaPorcentajeSubObjetivos(this.objetivoId) >= objetivo!.porcentajeObjetivo) {
       alert("El porcentaje del sub objetivo excede el porcentaje del objetivo");
 
@@ -172,7 +169,7 @@ export class ObjetivosComponent implements OnInit {
       jsPDFDocument: doc,
       component: this.dataGrid!.instance
     }).then(() => {
-      doc.save('objetivos.pdf');
+      doc.output('dataurlnewwindow');
     })
   }
 }

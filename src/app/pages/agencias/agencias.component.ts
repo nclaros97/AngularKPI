@@ -76,7 +76,6 @@ export class AgenciasComponent implements OnInit {
     });
   }
   updateAgenciaArea(areaAgencia: AreaAgencia): void {
-    debugger;
     areaAgencia.idAgencia = this.agenciaId;
     areaAgencia.idArea = this.areaId;
     areaAgencia.idCodigoIndiador = this.indicadorId;
@@ -91,11 +90,9 @@ export class AgenciasComponent implements OnInit {
   }
 
   handleValueChange(event: any): void {
-    debugger;
     this.areaId = event.value;
   }
   handleValueIndicadoresChange(event: any): void {
-    debugger;
     this.indicadorId = event.value;
   }
   handleRowColapsed(event: Agencia): void {
